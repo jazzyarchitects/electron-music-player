@@ -14,6 +14,7 @@
     "Music",
     "Player"
   ],
+  "repository": "https://github.com/jazzyarchitects/electron-music-player",
   "author": "Jibin Mathews <jibinmathews7@gmail.com>",
   "license": "MIT",
   "devDependencies": {

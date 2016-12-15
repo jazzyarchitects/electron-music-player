@@ -1,0 +1,19 @@
+body{
+  /*background: url('../img/background.jpeg');*/
+  width: 800px;
+  height: 600px;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+  ActionBar heigt: 56px;
+*/
+
+.main{
+  height: 552px;
+}
+
+.music-list{
+  background-color: #91BBFE;
+}

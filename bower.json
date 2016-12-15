@@ -1,0 +1,24 @@
+{
+  "name": "music-player",
+  "description": "A music player built with Electron",
+  "main": "main.js",
+  "authors": [
+    "Jibin Mathews <jibinmathews7@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Music",
+    "Electron",
+    "Music",
+    "Player"
+  ],
+  "homepage": "https://github.com/jazzyarchitects/electron-music-player",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
