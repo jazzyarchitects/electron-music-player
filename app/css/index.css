@@ -25,6 +25,10 @@ body{
   height: 552px;
 }
 
+input:focus{
+  outline: none;
+}
+
 #searchQuery{
   width: 90%;
   border-radius: 15px;
@@ -183,6 +187,28 @@ body{
   background-repeat: repeat;
   height: 152px;
   z-index: 0;
+  color: #fff;
+}
+
+md-slider-container{
+  width: 100%;
+}
+
+#audio-seekbar{
+  padding: 0 10px;
+}
+
+.seekbar{
+  line-height: 25px;
+  font-size: 12px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.player-options p{
+  display: block;
+  width: 100%;
+  text-align: center;
 }
 
 .overlay-black{

@@ -21,7 +21,10 @@ app.controller('MainController', ($scope)=>{
   $scope.player = {
     playClass: PLAY_CLASS,
     shuffle: "Off",
-    repeat: "Current"
+    repeat: "Current",
+    currentTime: 0,
+    endTime: 0,
+    duration: 0
   };
 
 
@@ -54,17 +57,32 @@ app.controller('MainController', ($scope)=>{
       return;   /*  Error assigning file  */
     }else if(audio===null){
       audio = new Audio(songPath);
+      audio.addEventListener('loadedmetadata', function() {
+        $scope.$apply(()=>{
+          $scope.player.duration = audio.duration;
+          $scope.player.currentTime = audio.currentTime;
+          $scope.player.endTime = audio.duration;
+          console.log(audio);
+        });
+      });
+      audio.addEventListener('timeupdate', ()=>{
+        $scope.$apply(()=>{
+          $scope.player.currentTime = audio.currentTime;
+        });
+      });
+      audio.addEventListener("ended", ()=>{
+        setTimeout(()=>{
+          if($scope.player.repeat.toLowerCase()==="current"){
+            $scope.play($scope.currentSong.index);
+          }else{
+            $scope.next();
+          }
+        }, 2000);
+      });
     }
 
     if(audio!==null) {
       audio.play();
-      audio.addEventListener("ended", ()=>{
-        if($scope.player.repeat.toLowerCase()==="current"){
-          $scope.play($scope.currentSong.index);
-        }else{
-          $scope.next();
-        }
-      });
     }
     $scope.player.playClass = PAUSE_CLASS;
     $scope.isPlaying = true;
@@ -73,7 +91,15 @@ app.controller('MainController', ($scope)=>{
   $scope.pause = function(stop){
     $scope.player.playClass = PLAY_CLASS;
     if(audio!==null) audio.pause();
-    if(stop) audio = null;
+    if(stop===true) {
+      audio = null;
+      $scope.$apply(()=>{
+        $scope.player.currentTime = 0;
+        $scope.player.duration = 0;
+        $scope.player.endTime = 0;
+        $scope.currentSong.name = "";
+      });
+    }
     $scope.isPlaying = false;
   }
 
@@ -103,11 +129,17 @@ app.controller('MainController', ($scope)=>{
     }
   }
 
+  $scope.changePlayback = function(){
+    if(audio!==null){
+      audio.currentTime = $scope.player.currentTime;
+    }
+  }
+
   $scope.next = function(){
-    if(!$scope.isPlaying) return;
-    if($scope.player.repeat.toLowerCase()==="off" && $scope.currentSong.index===$scope.playListSize-1){
+    if($scope.player.repeat.toLowerCase()==="off" && $scope.currentSong.index>=$scope.playListSize-1){
       $scope.pause(true)
     }else{
+      if(!$scope.isPlaying) return;
       $scope.currentSong.index = getNextIndex($scope.currentSong.index, $scope.playListSize);
       $scope.play($scope.currentSong.index);
     }
