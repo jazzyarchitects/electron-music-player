@@ -22,23 +22,32 @@
 
 
   <div layout="row" class="main">
-    <div class="music-list" flex="33">
+
+    <!-- Left Pane -->
+    <div class="music-list-holder" flex="33">
       <center><input type="text" ng-model="searchQuery" placeholder="&#9906; Search" id="searchQuery" /></center>
-      <div ng-repeat="song in songs">
-      <a  ng-click="play($index)"><li class="song-item">{{song | extentionFixer}}</li></a>
-      </div>
-    </div>
-    <div class="music-player" flex="66">
-      <div layout="row">
-        <div class="player-thumbnail">
-          <span class="bottom">{{ currentSong.name }}</span>
+      <div class="music-list">
+        <div ng-repeat="song in songs">
+          <a  ng-click="play($index)"><li class="song-item">{{song | extentionFixer}}</li></a>
         </div>
       </div>
+    </div>
+
+
+
+    <!-- Right pane -->
+    <div class="music-player" flex="66">
+      <!-- Top major part -->
+      <div layout="row" class="player-extras">
+        <div class="overlay-black"></div>
+        <div class="thumbnail">
+        </div>
+      </div>
+
+      <!-- Controls -->
       <div class="player-controls" layout="row">
-
-        <div class="control" flex="10">
-
-            <a href="#" ng-click="toggleLoop()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+        <div class="control" flex="10" ng-click="toggleRepeat()">
+            <a href="#"><i class="fa fa-refresh" aria-hidden="true"></i></a>
             <br /><span><p>{{ player.repeat }}</p>
           </span>
         </div>
@@ -55,17 +64,18 @@
         <div class="control" flex="20">
           <a ng-click="next()"><i class="fa fa-fast-forward" aria-hidden="true"></i></a>
         </div>
-        <div class="control" flex="10">
-
-            <a href="#" ng-click="toggleShuffle()"><i class="fa fa-random" aria-hidden="true"></i></a>
+        <div class="control" flex="10" ng-click="toggleShuffle()">
+            <a href="#"><i class="fa fa-random" aria-hidden="true"></i></a>
             <br />
             <span>
             <p>{{ player.shuffle }}</p>
           </span>
         </div>
       </div>
-      <div class="player-options">
 
+      <!-- Bottom options -->
+      <div class="player-options">
+      <center><font color="#fff">{{ currentSong.name | extentionFixer}}</font></center>
       </div>
     </div>
   </div>

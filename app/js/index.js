@@ -13,7 +13,9 @@ const PAUSE_CLASS = "fa-pause-circle";
 
 app.controller('MainController', ($scope)=>{
   $scope.songs = [];
-  $scope.currentSong = {};
+  $scope.currentSong = {
+    name: ""
+  };
   $scope.isPlaying = false;
   $scope.playListSize = 0;
   $scope.player = {
@@ -36,6 +38,7 @@ app.controller('MainController', ($scope)=>{
     }
     let songPath = undefined;
     if(index!==undefined){
+      audio = null;
       $scope.currentSong.index = index;
       $scope.currentSong.name = $scope.songs[index];
       songPath = "file://"+MUSIC_LIB+"/"+$scope.currentSong.name;
@@ -47,25 +50,30 @@ app.controller('MainController', ($scope)=>{
       }
     }
 
-    if(songPath===undefined){
+    if(songPath===undefined && audio===null){
       return;   /*  Error assigning file  */
+    }else if(audio===null){
+      audio = new Audio(songPath);
     }
 
-    audio = new Audio(songPath);
     if(audio!==null) {
       audio.play();
       audio.addEventListener("ended", ()=>{
+        if($scope.player.repeat.toLowerCase()==="current"){
+          $scope.play($scope.currentSong.index);
+        }else{
           $scope.next();
+        }
       });
     }
     $scope.player.playClass = PAUSE_CLASS;
     $scope.isPlaying = true;
   }
 
-  $scope.pause = function(){
+  $scope.pause = function(stop){
     $scope.player.playClass = PLAY_CLASS;
     if(audio!==null) audio.pause();
-    audio = null;
+    if(stop) audio = null;
     $scope.isPlaying = false;
   }
 
@@ -77,12 +85,36 @@ app.controller('MainController', ($scope)=>{
     }
   }
 
+  $scope.toggleShuffle = function(){
+    if($scope.player.shuffle.toLowerCase()==="off"){
+      $scope.player.shuffle = "On";
+    }else{
+      $scope.player.shuffle = "Off";
+    }
+  };
+
+  $scope.toggleRepeat = function(){
+    if($scope.player.repeat.toLowerCase()==="off"){
+      $scope.player.repeat = "Current";
+    }else if($scope.player.repeat.toLowerCase()==="current"){
+      $scope.player.repeat = "All";
+    }else{
+      $scope.player.repeat = "Off";
+    }
+  }
+
   $scope.next = function(){
-    $scope.currentSong.index = getNextIndex($scope.currentSong.index, $scope.playListSize);
-    $scope.play($scope.currentSong.index);
+    if(!$scope.isPlaying) return;
+    if($scope.player.repeat.toLowerCase()==="off" && $scope.currentSong.index===$scope.playListSize-1){
+      $scope.pause(true)
+    }else{
+      $scope.currentSong.index = getNextIndex($scope.currentSong.index, $scope.playListSize);
+      $scope.play($scope.currentSong.index);
+    }
   }
 
   $scope.prev = function(){
+    if(!$scope.isPlaying) return;
     $scope.currentSong.index = getPrevIndex($scope.currentSong.index, $scope.playListSize);
     $scope.play($scope.currentSong.index);
   }

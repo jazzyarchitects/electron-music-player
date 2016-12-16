@@ -4,10 +4,13 @@ body{
   height: 600px;
   margin: 0;
   padding: 0;
-}
-
-select{
-  background: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: hidden;
 }
 /*
   ActionBar heigt: 56px;
@@ -22,9 +25,53 @@ select{
   height: 552px;
 }
 
-.music-list{
+#searchQuery{
+  width: 90%;
+  border-radius: 15px;
+  border: #888 1px solid;
+  line-height: 20px;
+  font-size: 14px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  outline: none;
+}
+
+#searchQuery:focus{
+  outline: none;
+}
+
+.music-list-holder{
   background: url('../img/background.jpeg');
+  height: 552px;
+}
+
+.music-list{
+  height: 510px;
   list-style: none;
+  overflow-y: auto;
+}
+
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    background: #F47500;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(255,0,0,0.4);
 }
 
 .song-item{
@@ -42,8 +89,26 @@ select{
   transition-duration: 500ms;
 }
 
-.player-thumbnail{
+.player-extras{
+  /*background: url('../img/footer_lodyas.png');*/
+  /*background-repeat: repeat;*/
+  background: url('../img/player-background.jpg');
+  background-position: -416px -387px;
   height: 350px;
+}
+
+.player-extras > .thumbnail{
+  background: url('../img/footer_lodyas.png');
+  background-repeat: repeat;
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border: 5px groove #000;
+  top: 192px;
+  left: 443.26px;
+}
+
+.thumbnail{
 }
 
 .player-controls{
@@ -51,6 +116,7 @@ select{
   background: url('../img/black_twill.png') ;
   background-repeat: repeat;
   border: 1px solid #000;
+  z-index: 3;
 }
 
 .fa{
@@ -71,6 +137,7 @@ select{
   transition-duration: 250ms;
 }
 
+/* Prev, Play, Next Buttons */
 .control:nth-child(2), .control:nth-child(1){
   text-align: right;
 }
@@ -80,13 +147,18 @@ select{
 .control:nth-child(4), .control:nth-child(5){
   text-align: left;
 }
+
+/* Repeat and Shuffle Buttons */
 .control:nth-child(1) span, .control:nth-child(5) span{
   position: absolute;
   top: 426px;
   width: 30px;
   text-align: center;
-  /*border: 1px #fff solid;*/
 }
+
+/*.control:nth-child(1) a, .control:nth-child(5) a{
+  display: block;
+}*/
 
 .control:nth-child(1) p, .control:nth-child(5) p{
   font-size: 8px;
@@ -106,26 +178,15 @@ select{
 }
 
 .player-options{
+  padding: 10px 5px;
   background: url('../img/blackmamba.png');
   background-repeat: repeat;
   height: 152px;
+  z-index: 0;
 }
 
-#searchQuery{
-  width: 90%;
-  border-radius: 15px;
-  border: #888888 1px solid;
-  line-height: 20px;
-  font-size: 14px;
-  padding: 5px 10px;
-  margin-bottom: 5px;
-  margin-top: 5px;
+.overlay-black{
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
 }
-
-.bottom{
-  position: static;
-  bottom: 0px;
-  color: #000;
-  text-align: center;
-}
-
