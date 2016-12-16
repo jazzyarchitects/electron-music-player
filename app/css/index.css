@@ -6,14 +6,126 @@ body{
   padding: 0;
 }
 
+select{
+  background: none;
+}
 /*
   ActionBar heigt: 56px;
 */
+
+.toolbar{
+  cursor: move;
+  -webkit-app-region: drag;
+}
 
 .main{
   height: 552px;
 }
 
 .music-list{
-  background-color: #91BBFE;
+  background: url('../img/background.jpeg');
+  list-style: none;
 }
+
+.song-item{
+  padding: 5px;
+  color: #eeeeee;
+  background: rgba(0,0,0,0.4);
+  transition-duration: 500ms;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 1px;
+}
+
+.song-item:hover{
+  background: rgba(0,0,0,0.9);
+  transition-duration: 500ms;
+}
+
+.player-thumbnail{
+  height: 350px;
+}
+
+.player-controls{
+  height: 50px;
+  background: url('../img/black_twill.png') ;
+  background-repeat: repeat;
+  border: 1px solid #000;
+}
+
+.fa{
+  color: #ccc;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 50px;
+  transition-duration: 250ms;
+}
+
+.fa-play-circle, .fa-pause-circle{
+  font-size: 48px;
+  line-height: 50px;
+}
+
+.fa:hover{
+  color: #fff;
+  transition-duration: 250ms;
+}
+
+.control:nth-child(2), .control:nth-child(1){
+  text-align: right;
+}
+.control:nth-child(3){
+  text-align: center;
+}
+.control:nth-child(4), .control:nth-child(5){
+  text-align: left;
+}
+.control:nth-child(1) span, .control:nth-child(5) span{
+  position: absolute;
+  top: 426px;
+  width: 30px;
+  text-align: center;
+  /*border: 1px #fff solid;*/
+}
+
+.control:nth-child(1) p, .control:nth-child(5) p{
+  font-size: 8px;
+  color: #eee;
+}
+.control:nth-child(1) span{
+  left: 293px;
+}
+.control:nth-child(5) span{
+  right: 31px;
+}
+.control:nth-child(1) .fa, .control:nth-child(5) .fa{
+  font-size: 16px;
+}
+.control:focus{
+  outline: none;
+}
+
+.player-options{
+  background: url('../img/blackmamba.png');
+  background-repeat: repeat;
+  height: 152px;
+}
+
+#searchQuery{
+  width: 90%;
+  border-radius: 15px;
+  border: #888888 1px solid;
+  line-height: 20px;
+  font-size: 14px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.bottom{
+  position: static;
+  bottom: 0px;
+  color: #000;
+  text-align: center;
+}
+

@@ -3,11 +3,12 @@
 <head>
   <title>My Music Player</title>
   <link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body ng-controller="MainController" ng-init="init()">
 
-  <md-toolbar class="md-hue-2">
+  <md-toolbar class="md-hue-2 toolbar">
     <div class="md-toolbar-tools">
       <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
         <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
@@ -22,14 +23,50 @@
 
   <div layout="row" class="main">
     <div class="music-list" flex="33">
-      <ol>
-        <div ng-repeat="song in songs">
-          <li>{{song}}</li>
-        </div>
-      </ol>
+      <center><input type="text" ng-model="searchQuery" placeholder="&#9906; Search" id="searchQuery" /></center>
+      <div ng-repeat="song in songs">
+      <a  ng-click="play($index)"><li class="song-item">{{song | extentionFixer}}</li></a>
+      </div>
     </div>
     <div class="music-player" flex="66">
+      <div layout="row">
+        <div class="player-thumbnail">
+          <span class="bottom">{{ currentSong.name }}</span>
+        </div>
+      </div>
+      <div class="player-controls" layout="row">
 
+        <div class="control" flex="10">
+
+            <a href="#" ng-click="toggleLoop()"><i class="fa fa-refresh" aria-hidden="true"></i></a>
+            <br /><span><p>{{ player.repeat }}</p>
+          </span>
+        </div>
+
+        <div class="control" flex="20">
+          <a href="#" ng-click="prev()"><i class="fa fa-fast-backward" aria-hidden="true"></i></a>
+        </div>
+        <div class="control" flex="40">
+          <a ng-click="togglePlay()">
+            <i class="fa" ng-class="player.playClass" aria-hidden="true">
+            </i>
+          </a>
+        </div>
+        <div class="control" flex="20">
+          <a ng-click="next()"><i class="fa fa-fast-forward" aria-hidden="true"></i></a>
+        </div>
+        <div class="control" flex="10">
+
+            <a href="#" ng-click="toggleShuffle()"><i class="fa fa-random" aria-hidden="true"></i></a>
+            <br />
+            <span>
+            <p>{{ player.shuffle }}</p>
+          </span>
+        </div>
+      </div>
+      <div class="player-options">
+
+      </div>
     </div>
   </div>
 
@@ -42,6 +79,7 @@
   <!-- Angular Material Library -->
   <script src="../bower_components/angular-material/angular-material.min.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
+  <script src="js/song-name-replacer-filter.js"></script>
 
 </body>
 </html>
