@@ -114,8 +114,8 @@ input:focus{
 .thumbnail-img{
   width: 180px;
   height: 180px;
-  object-fit: none;
-  object-position: left;
+  /*object-fit: none;/**/
+  /*object-position: left;*/
 }
 
 .player-controls{

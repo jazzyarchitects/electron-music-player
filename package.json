@@ -24,7 +24,11 @@
     "eslint-config-google": "^0.7.1"
   },
   "dependencies": {
+    "base-64": "^0.1.0",
     "id3-parser": "^1.1.1",
-    "musicmetadata": "^2.0.5"
+    "music-metadata": "^0.1.2",
+    "music-tag": "0.0.9",
+    "musicmetadata": "^2.0.5",
+    "node-id3": "0.0.7"
   }
 }
