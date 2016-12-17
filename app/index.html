@@ -41,6 +41,7 @@
       <div layout="row" class="player-extras">
         <div class="overlay-black"></div>
         <div class="thumbnail">
+          <img ng-src="{{ currentSong.imageURL }}" class="thumbnail-img" />
         </div>
       </div>
 
@@ -83,6 +84,13 @@
       <div layout="row" flex="100">
       <p>{{ currentSong.name | extentionFixer}}</p>
       </div>
+      <div layout="row" flex="100" class="volume-control-holder">
+          <i class="fa fa-volume-down" ng-click="decreaseVolume()"></i>
+      <md-slider-container>
+          <md-slider min="0" max="100" class="md-primary md-hue-4" ng-model="player.volume" step="5" type="range" name="volume-seekbar" id="volume-seekbar" ng-mouseup="changeVolume()"></md-slider>
+        </md-slider-container>
+          <i class="fa fa-volume-up" ng-click="increaseVolume()"></i>
+      </div>
     </div>
   </div>
 </div>
@@ -95,6 +103,7 @@
 
 <!-- Angular Material Library -->
 <script src="../bower_components/angular-material/angular-material.min.js"></script>
+<script src="js/jsmediatags.min.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 <script src="js/song-name-replacer-filter.js"></script>
 <script src="js/time-converter.js"></script>

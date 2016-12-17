@@ -46,7 +46,8 @@ input:focus{
 }
 
 .music-list-holder{
-  background: url('../img/background.jpeg');
+  /*background: url('../img/background.jpeg');*/
+  background: #18226A;
   height: 552px;
 }
 
@@ -94,8 +95,6 @@ input:focus{
 }
 
 .player-extras{
-  /*background: url('../img/footer_lodyas.png');*/
-  /*background-repeat: repeat;*/
   background: url('../img/player-background.jpg');
   background-position: -416px -387px;
   height: 350px;
@@ -112,7 +111,11 @@ input:focus{
   left: 443.26px;
 }
 
-.thumbnail{
+.thumbnail-img{
+  width: 180px;
+  height: 180px;
+  object-fit: none;
+  object-position: left;
 }
 
 .player-controls{
@@ -183,14 +186,20 @@ input:focus{
 
 .player-options{
   padding: 10px 5px;
+  padding-bottom: 33px;
   background: url('../img/blackmamba.png');
   background-repeat: repeat;
-  height: 152px;
+  position: relative;
+  height: 133px;
   z-index: 0;
   color: #fff;
 }
 
 md-slider-container{
+  cursor: pointer;
+}
+
+.player-options md-slider-container{
   width: 100%;
 }
 
@@ -215,4 +224,30 @@ md-slider-container{
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.5);
+}
+
+.volume-control-holder{
+  position: absolute;
+  width: 50%;
+  bottom: 0px;
+  right: 0px;
+  left: 50%;
+  padding: 2px 10px 10px 5px;
+  line-height: 12px;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+i:focus{
+  outline: none;
+}
+
+.volume-control-holder md-slider-container{
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-bottom: 15px;
+}
+
+.md-hue-green{
+  color: #2E7D32;
 }
