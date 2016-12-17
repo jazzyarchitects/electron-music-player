@@ -17,6 +17,8 @@ const PLAY_CLASS = "fa-play-circle";
 const PAUSE_CLASS = "fa-pause-circle";
 
 app.controller('MainController', ($scope)=>{
+
+  /* Basic environment setup */
   $scope.songs = [];
   $scope.currentSong = {
     name: "",
@@ -36,11 +38,13 @@ app.controller('MainController', ($scope)=>{
   };
 
 
+  /* Initial loading from the music directory */
   $scope.init = ()=>{
     $scope.songs = readFileFromDirectory(MUSIC_LIB);
     $scope.playListSize = $scope.songs.length;
   };
 
+  /* Function to play a selected audio file, or the previously paused*/
   $scope.play = function (index) {
     if($scope.isPlaying){
       $scope.pause();
@@ -111,6 +115,7 @@ app.controller('MainController', ($scope)=>{
     $scope.isPlaying = true;
   }
 
+  /* To pause the audio file.  */
   $scope.pause = function(stop){
     $scope.player.playClass = PLAY_CLASS;
     if(audio!==null) audio.pause();
@@ -126,6 +131,7 @@ app.controller('MainController', ($scope)=>{
     $scope.isPlaying = false;
   }
 
+  /* Function to change functionality of play/pause button */
   $scope.togglePlay = function(){
     if($scope.isPlaying){
       $scope.pause();
@@ -134,6 +140,7 @@ app.controller('MainController', ($scope)=>{
     }
   }
 
+  /* Toggling shuffle on or off */
   $scope.toggleShuffle = function(){
     if($scope.player.shuffle.toLowerCase()==="off"){
       $scope.player.shuffle = "On";
@@ -143,6 +150,7 @@ app.controller('MainController', ($scope)=>{
     $scope.player.playedIndices = [];
   };
 
+  /* Toggling repeat off, current or all */
   $scope.toggleRepeat = function(){
     if($scope.player.repeat.toLowerCase()==="off"){
       $scope.player.repeat = "Current";
@@ -153,12 +161,14 @@ app.controller('MainController', ($scope)=>{
     }
   }
 
+  /* Function to move audio to selected time when mouse leaves the seekbar */
   $scope.changePlayback = function(){
     if(audio!==null){
       audio.currentTime = $scope.player.currentTime;
     }
   }
 
+  /* Play the next function if repeat all or off. If off, then stop if last item. If shuffle on, get random unplayed song */
   $scope.next = function(){
     if($scope.player.repeat.toLowerCase()==="off" && (($scope.currentSong.index>=$scope.playListSize-1 && $scope.player.shuffle.toLowerCase()==="off") || ($scope.player.playedIndices.length===$scope.playListSize && $scope.player.shuffle.toLowerCase()==="on"))){
       $scope.pause(true)
@@ -173,23 +183,27 @@ app.controller('MainController', ($scope)=>{
     }
   }
 
+  /* PLay previous song from the list */
   $scope.prev = function(){
     if(!$scope.isPlaying) return;
     $scope.currentSong.index = getPrevIndex($scope.currentSong.index, $scope.playListSize);
     $scope.play($scope.currentSong.index);
   }
 
+  /* Change the volume with slider */
   $scope.changeVolume = function(){
     if(audio!==null){
       audio.volume = $scope.player.volume/100;
     }
   }
 
+  /* Increase volume with volume up button */
   $scope.increaseVolume = function(){
     $scope.player.volume = $scope.player.volume<95?$scope.player.volume+5:100;
     $scope.changeVolume();
   }
 
+  /* Decrease volume with volume down button */
   $scope.decreaseVolume = function(){
     $scope.player.volume = $scope.player.volume>5?$scope.player.volume-5:0;
     $scope.changeVolume();
