@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const id3 = require('id3-parser');
-const jsmediatags = require('jsmediatags')
+const jsmediatags = require('jsmediatags');
 
 const readFileFromDirectory = require('./node/read-file-from-directory');
 const readMediaTags = require('./node/mediatags-get-tags.js');

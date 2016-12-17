@@ -9,6 +9,7 @@ let mainWindow = null;
 
 app.on('ready', ()=>{
   mainWindow = new BrowserWindow({
+    frame: false,
     resizable: false,
     height: 600,
     width: 800

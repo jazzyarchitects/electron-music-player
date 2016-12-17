@@ -21,6 +21,11 @@ body{
   -webkit-app-region: drag;
 }
 
+.buttons .fa{
+  font-size: 15px;
+  -webkit-app-region: no-drag;
+}
+
 .main{
   height: 552px;
 }

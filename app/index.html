@@ -10,13 +10,16 @@
 
   <md-toolbar class="md-hue-2 toolbar">
     <div class="md-toolbar-tools">
-      <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
-        <!-- <md-icon md-svg-icon="img/icons/menu.svg"></md-icon> -->
-      </md-button>
       <h2>
         <span>MUSIC PLAYER</span>
       </h2>
-      <span flex=""></span>
+      <span flex="">
+
+      </span>
+      <div class="buttons">
+      <i class="fa fa-window-minimize" onclick="minimize()"></i>&nbsp;&nbsp;
+      <i class="fa fa-close" onclick="closeWindow()"></i>
+      </div>
     </div>
   </md-toolbar>
 
@@ -106,6 +109,8 @@
 <script type="text/javascript" src="js/index.js"></script>
 <script src="js/song-name-replacer-filter.js"></script>
 <script src="js/time-converter.js"></script>
+
+<script type="text/javascript" src="js/window-interfacer.js"></script>
 
 </body>
 </html>
