@@ -7,6 +7,7 @@ const jsmediatags = require('jsmediatags');
 
 const readFileFromDirectory = require('./node/read-file-from-directory');
 const readMediaTags = require('./node/mediatags-get-tags.js');
+const assignShortcuts = require('./node/shortcuts');
 
 const MUSIC_LIB = "/home/jibin/Music";
 
@@ -22,6 +23,7 @@ app.controller('MainController', ($scope)=>{
   $scope.songs = [];
   $scope.currentSong = {
     name: "",
+    index: 0,
     imageURL: "img/footer_lodyas.png"
   };
   $scope.isPlaying = false;
@@ -173,7 +175,6 @@ app.controller('MainController', ($scope)=>{
     if($scope.player.repeat.toLowerCase()==="off" && (($scope.currentSong.index>=$scope.playListSize-1 && $scope.player.shuffle.toLowerCase()==="off") || ($scope.player.playedIndices.length===$scope.playListSize && $scope.player.shuffle.toLowerCase()==="on"))){
       $scope.pause(true)
     }else{
-      if(!$scope.isPlaying) return;
       if($scope.player.shuffle.toLowerCase()==="off") $scope.currentSong.index = getNextIndex($scope.currentSong.index, $scope.playListSize);
       else {
         $scope.currentSong.index = getRandomIndexNotIn($scope.playListSize, $scope.player.playedIndices);
@@ -185,7 +186,6 @@ app.controller('MainController', ($scope)=>{
 
   /* PLay previous song from the list */
   $scope.prev = function(){
-    if(!$scope.isPlaying) return;
     $scope.currentSong.index = getPrevIndex($scope.currentSong.index, $scope.playListSize);
     $scope.play($scope.currentSong.index);
   }
@@ -209,6 +209,25 @@ app.controller('MainController', ($scope)=>{
     $scope.changeVolume();
   }
 
+  $scope.seekMedia = function(seekTime){
+    if(audio!==null){
+      let a = audio.currentTime + seekTime;
+      if(a<0){
+        a = 0;
+      }else if(a>audio.duration){
+        a = audio.duration;
+      }
+      audio.currentTime = a;
+      $scope.player.currentTime = audio.currentTime;
+    }
+  }
+
+  $scope.seekSmallAhead = $scope.seekMedia(5);
+  $scope.seekSmallBehind = $scope.seekMedia(-5);
+  $scope.seekLargeAhead = $scope.seekMedia(30);
+  $scope.seekLargeBehind = $scope.seekMedia(-30);
+
+  assignShortcuts($scope);
 
 });
 

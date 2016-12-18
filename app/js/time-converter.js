@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 app.filter('timeConverter', ()=>{
   return function(seconds){
