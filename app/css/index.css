@@ -11,7 +11,19 @@ body{
   -ms-user-select: none;
   user-select: none;
   overflow: hidden;
+
+  border: 2px #fff solid;
 }
+
+.blackborder{
+  position: fixed;
+  width: 798px;
+  height: 598px;
+  border: 2px #000 solid;
+  z-index: 999;
+  pointer-events: none;
+}
+
 /*
   ActionBar heigt: 56px;
 */
@@ -94,7 +106,7 @@ input:focus{
   margin-bottom: 1px;
 }
 
-.song-item:hover{
+.song-item:hover, .song-item-active{
   background: rgba(0,0,0,0.9);
   transition-duration: 500ms;
 }
@@ -128,7 +140,6 @@ input:focus{
   background: url('../img/black_twill.png') ;
   background-repeat: repeat;
   border: 1px solid #000;
-  z-index: 3;
 }
 
 .fa{
@@ -191,12 +202,10 @@ input:focus{
 
 .player-options{
   padding: 10px 5px;
-  padding-bottom: 33px;
   background: url('../img/blackmamba.png');
   background-repeat: repeat;
   position: relative;
-  height: 133px;
-  z-index: 0;
+  height: 132px;
   color: #fff;
 }
 

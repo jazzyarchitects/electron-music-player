@@ -29,7 +29,7 @@ app.controller('MainController', ($scope)=>{
   $scope.player = {
     playClass: PLAY_CLASS,
     shuffle: "Off",
-    repeat: "Current",
+    repeat: "All",
     currentTime: 0,
     endTime: 0,
     duration: 0,

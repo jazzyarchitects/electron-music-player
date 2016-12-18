@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body ng-controller="MainController" ng-init="init()">
+<div class="blackborder"></div>
 
   <md-toolbar class="md-hue-2 toolbar">
     <div class="md-toolbar-tools">
@@ -31,7 +32,7 @@
       <center><input type="text" ng-model="searchQuery" placeholder="&#9906; Search" id="searchQuery" /></center>
       <div class="music-list">
         <div ng-repeat="song in songs">
-          <a  ng-click="play($index)"><li class="song-item">{{song | extentionFixer}}</li></a>
+          <a  ng-click="play($index)"><li class="song-item" ng-click="">{{song | extentionFixer}}</li></a>
         </div>
       </div>
     </div>
