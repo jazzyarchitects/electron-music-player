@@ -12,6 +12,7 @@ module.exports = {
       "require-jsdoc": 0,
       "max-len": 0,
       "new-cap": 0,
-      "guard-for-in": 0
+      "guard-for-in": 0,
+      "no-unused-vars": 1
     }
 };

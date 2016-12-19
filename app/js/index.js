@@ -1,6 +1,5 @@
 "use strict";
 
-const fs = require('fs');
 const path = require('path');
 
 const readFileFromDirectory = require('./node/read-file-from-directory');
@@ -10,13 +9,12 @@ const assignShortcuts = require('./node/shortcuts');
 const MUSIC_LIB = "/home/jibin/Music";
 
 let app = angular.module('MusicPlayer', ['ngMaterial']);
-var audio = null;
+let audio = null;
 
 const PLAY_CLASS = "fa-play-circle";
 const PAUSE_CLASS = "fa-pause-circle";
 
 app.controller('MainController', ($scope)=>{
-
   /* Basic environment setup */
   $scope.songs = [];
   $scope.currentSongs = [];
@@ -55,27 +53,27 @@ app.controller('MainController', ($scope)=>{
   };
 
   /* Function to play a selected audio file, or the previously paused*/
-  $scope.play = function (index) {
-    if($scope.isPlaying){
+  $scope.play = function(index) {
+    if($scope.isPlaying) {
       $scope.pause();
     }
     let songPath = undefined;
-    if(index!==undefined){
+    if(index!==undefined) {
       audio = null;
       $scope.currentSong.index = index;
       $scope.currentSong.name = $scope.currentSongs[index];
       songPath = "file://"+MUSIC_LIB+"/"+$scope.currentSong.name;
     }else{
-      if(audio===null){
+      if(audio===null) {
         $scope.currentSong.name = $scope.currentSongs[0];
         $scope.currentSong.index = 0;
         songPath = "file://"+MUSIC_LIB+"/"+$scope.currentSongs[0];
       }
     }
 
-    if(songPath===undefined && audio===null){
+    if(songPath===undefined && audio===null) {
       return;   /*  Error assigning file  */
-    }else if(audio===null){
+    }else if(audio===null) {
       audio = new Audio(songPath);
       readMediaTags(path.join(MUSIC_LIB, $scope.currentSong.name))
       .then((tag)=>{
@@ -109,7 +107,7 @@ app.controller('MainController', ($scope)=>{
       /* Listener for when a song has finished */
       audio.addEventListener("ended", ()=>{
         setTimeout(()=>{
-          if($scope.player.repeat.toLowerCase()==="current"){
+          if($scope.player.repeat.toLowerCase()==="current") {
             $scope.play($scope.currentSong.index);
           }else{
             $scope.next();
@@ -126,7 +124,7 @@ app.controller('MainController', ($scope)=>{
   }
 
   /* To pause the audio file.  */
-  $scope.pause = function(stop){
+  $scope.pause = function(stop) {
     $scope.player.playClass = PLAY_CLASS;
     if(audio!==null) audio.pause();
     if(stop===true) {
@@ -142,8 +140,8 @@ app.controller('MainController', ($scope)=>{
   }
 
   /* Function to change functionality of play/pause button */
-  $scope.togglePlay = function(){
-    if($scope.isPlaying){
+  $scope.togglePlay = function() {
+    if($scope.isPlaying) {
       $scope.pause();
     }else{
       $scope.play();
@@ -151,8 +149,8 @@ app.controller('MainController', ($scope)=>{
   }
 
   /* Toggling shuffle on or off */
-  $scope.toggleShuffle = function(){
-    if($scope.player.shuffle.toLowerCase()==="off"){
+  $scope.toggleShuffle = function() {
+    if($scope.player.shuffle.toLowerCase()==="off") {
       $scope.player.shuffle = "On";
     }else{
       $scope.player.shuffle = "Off";
@@ -161,10 +159,10 @@ app.controller('MainController', ($scope)=>{
   };
 
   /* Toggling repeat off, current or all */
-  $scope.toggleRepeat = function(){
-    if($scope.player.repeat.toLowerCase()==="off"){
+  $scope.toggleRepeat = function() {
+    if($scope.player.repeat.toLowerCase()==="off") {
       $scope.player.repeat = "Current";
-    }else if($scope.player.repeat.toLowerCase()==="current"){
+    }else if($scope.player.repeat.toLowerCase()==="current") {
       $scope.player.repeat = "All";
     }else{
       $scope.player.repeat = "Off";
@@ -172,15 +170,15 @@ app.controller('MainController', ($scope)=>{
   }
 
   /* Function to move audio to selected time when mouse leaves the seekbar */
-  $scope.changePlayback = function(){
-    if(audio!==null){
+  $scope.changePlayback = function() {
+    if(audio!==null) {
       audio.currentTime = $scope.player.currentTime;
     }
   }
 
   /* Play the next function if repeat all or off. If off, then stop if last item. If shuffle on, get random unplayed song */
-  $scope.next = function(){
-    if($scope.player.repeat.toLowerCase()==="off" && (($scope.currentSong.index>=$scope.playListSize-1 && $scope.player.shuffle.toLowerCase()==="off") || ($scope.player.playedIndices.length===$scope.playListSize && $scope.player.shuffle.toLowerCase()==="on"))){
+  $scope.next = function() {
+    if($scope.player.repeat.toLowerCase()==="off" && (($scope.currentSong.index>=$scope.playListSize-1 && $scope.player.shuffle.toLowerCase()==="off") || ($scope.player.playedIndices.length===$scope.playListSize && $scope.player.shuffle.toLowerCase()==="on"))) {
       $scope.pause(true)
     }else{
       if($scope.player.shuffle.toLowerCase()==="off") $scope.currentSong.index = getNextIndex($scope.currentSong.index, $scope.playListSize);
@@ -193,36 +191,36 @@ app.controller('MainController', ($scope)=>{
   }
 
   /* PLay previous song from the list */
-  $scope.prev = function(){
+  $scope.prev = function() {
     $scope.currentSong.index = getPrevIndex($scope.currentSong.index, $scope.playListSize);
     $scope.play($scope.currentSong.index);
   }
 
   /* Change the volume with slider */
-  $scope.changeVolume = function(){
-    if(audio!==null){
+  $scope.changeVolume = function() {
+    if(audio!==null) {
       audio.volume = $scope.player.volume/100;
     }
   }
 
   /* Increase volume with volume up button */
-  $scope.increaseVolume = function(){
+  $scope.increaseVolume = function() {
     $scope.player.volume = $scope.player.volume<95?$scope.player.volume+5:100;
     $scope.changeVolume();
   }
 
   /* Decrease volume with volume down button */
-  $scope.decreaseVolume = function(){
+  $scope.decreaseVolume = function() {
     $scope.player.volume = $scope.player.volume>5?$scope.player.volume-5:0;
     $scope.changeVolume();
   }
 
-  $scope.seekMedia = function(seekTime){
-    if(audio!==null){
+  $scope.seekMedia = function(seekTime) {
+    if(audio!==null) {
       let a = audio.currentTime + seekTime;
-      if(a<0){
+      if(a<0) {
         a = 0;
-      }else if(a>audio.duration){
+      }else if(a>audio.duration) {
         a = audio.duration;
       }
       audio.currentTime = a;
@@ -231,37 +229,36 @@ app.controller('MainController', ($scope)=>{
   }
 
   assignShortcuts($scope);
-
 });
 
 
-function getNextIndex(i, arrayLength){
+function getNextIndex(i, arrayLength) {
   i++;
-  if(arrayLength<=0){
+  if(arrayLength<=0) {
     return -1;
   }
   return i%arrayLength;
 }
 
-function getPrevIndex(i, arrayLength){
+function getPrevIndex(i, arrayLength) {
   i--;
-  if(i<0){
+  if(i<0) {
     i = arrayLength-1;
   }
   return i;
 }
 
-function getRandomIndexNotIn(arrayLength, usedList){
+function getRandomIndexNotIn(arrayLength, usedList) {
   let a = Math.floor(Math.random()*arrayLength);
-  if(usedList.indexOf(a)===-1){
+  if(usedList.indexOf(a)===-1) {
     return a;
   }else{
     return getRandomIndexNotIn(arrayLength, usedList);
   }
 }
 
-function liveSearchFilter(query){
-  return function(el){
+function liveSearchFilter(query) {
+  return function(el) {
     let regex = new RegExp(query, 'g');
     return regex.test(el);
   }

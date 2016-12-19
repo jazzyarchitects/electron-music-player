@@ -4,18 +4,21 @@
 const SHORT_SKIP = 5;
 const LONG_SKIP = 30;
 
-module.exports = function($scope){
-
+module.exports = function($scope) {
 let electron = require('electron');
 let ipc = electron.ipcRenderer;
   ipc.on('Shortcut', (event, action)=>{
     console.log(action);
-    switch(action){
+    switch(action) {
       case "VolumeUp":
-        $scope.$apply(()=>{$scope.increaseVolume();});
+        $scope.$apply(()=>{
+$scope.increaseVolume();
+});
         break;
       case "VolumeDown":
-        $scope.$apply(()=>{$scope.decreaseVolume();});
+        $scope.$apply(()=>{
+$scope.decreaseVolume();
+});
         break;
       case "SeekShortBackward":
         $scope.seekMedia(-SHORT_SKIP);

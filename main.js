@@ -27,14 +27,13 @@ app.on('ready', ()=>{
   shortcuts.forEach((ob)=>{
     globalShortcut.register(ob.key, ob.cb);
   });
-
-
 })
 
 app.on('window-all-closed', ()=> {
-  if (process.platform != 'darwin') {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
+  globalShortcut.unregisterAll();
 });
 
 app.on('will-quit', ()=>{
