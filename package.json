@@ -30,6 +30,7 @@
     "music-metadata": "^0.1.2",
     "music-tag": "0.0.9",
     "musicmetadata": "^2.0.5",
+    "nconf": "^0.8.4",
     "node-id3": "0.0.7"
   }
 }
