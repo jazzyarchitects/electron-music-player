@@ -2,8 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const id3 = require('id3-parser');
-const jsmediatags = require('jsmediatags');
 
 const readFileFromDirectory = require('./node/read-file-from-directory');
 const readMediaTags = require('./node/mediatags-get-tags.js');
@@ -21,11 +19,13 @@ app.controller('MainController', ($scope)=>{
 
   /* Basic environment setup */
   $scope.songs = [];
+  $scope.currentSongs = [];
   $scope.currentSong = {
     name: "",
     index: 0,
     imageURL: "img/footer_lodyas.png"
   };
+  $scope.searchQuery = "";
   $scope.isPlaying = false;
   $scope.playListSize = 0;
   $scope.player = {
@@ -39,11 +39,19 @@ app.controller('MainController', ($scope)=>{
     playedIndices: []
   };
 
+  $scope.$watch('currentSongs', ()=>{
+    $scope.playListSize = $scope.currentSongs.length;
+  });
+
+  $scope.$watch('searchQuery', ()=>{
+    $scope.currentSongs = $scope.songs.filter(liveSearchFilter($scope.searchQuery));
+  });
 
   /* Initial loading from the music directory */
   $scope.init = ()=>{
     $scope.songs = readFileFromDirectory(MUSIC_LIB);
-    $scope.playListSize = $scope.songs.length;
+    $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
+    $scope.playListSize = $scope.currentSongs.length;
   };
 
   /* Function to play a selected audio file, or the previously paused*/
@@ -55,13 +63,13 @@ app.controller('MainController', ($scope)=>{
     if(index!==undefined){
       audio = null;
       $scope.currentSong.index = index;
-      $scope.currentSong.name = $scope.songs[index];
+      $scope.currentSong.name = $scope.currentSongs[index];
       songPath = "file://"+MUSIC_LIB+"/"+$scope.currentSong.name;
     }else{
       if(audio===null){
-        $scope.currentSong.name = $scope.songs[0];
+        $scope.currentSong.name = $scope.currentSongs[0];
         $scope.currentSong.index = 0;
-        songPath = "file://"+MUSIC_LIB+"/"+$scope.songs[0];
+        songPath = "file://"+MUSIC_LIB+"/"+$scope.currentSongs[0];
       }
     }
 
@@ -222,11 +230,6 @@ app.controller('MainController', ($scope)=>{
     }
   }
 
-  $scope.seekSmallAhead = $scope.seekMedia(5);
-  $scope.seekSmallBehind = $scope.seekMedia(-5);
-  $scope.seekLargeAhead = $scope.seekMedia(30);
-  $scope.seekLargeBehind = $scope.seekMedia(-30);
-
   assignShortcuts($scope);
 
 });
@@ -234,6 +237,9 @@ app.controller('MainController', ($scope)=>{
 
 function getNextIndex(i, arrayLength){
   i++;
+  if(arrayLength<=0){
+    return -1;
+  }
   return i%arrayLength;
 }
 
@@ -251,5 +257,12 @@ function getRandomIndexNotIn(arrayLength, usedList){
     return a;
   }else{
     return getRandomIndexNotIn(arrayLength, usedList);
+  }
+}
+
+function liveSearchFilter(query){
+  return function(el){
+    let regex = new RegExp(query, 'g');
+    return regex.test(el);
   }
 }
