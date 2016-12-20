@@ -1,5 +1,6 @@
 "use strict";
 const electron = require('electron');
+const path = require('path');
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -23,11 +24,13 @@ app.on('ready', ()=>{
   });
 
 
-  const shortcuts = require('./globalShortcuts.js')(mainWindow);
+  const shortcuts = require(path.join(__dirname, 'modules', 'globalShortcuts'))(mainWindow);
   shortcuts.forEach((ob)=>{
     globalShortcut.register(ob.key, ob.cb);
   });
-})
+
+  require(path.join(__dirname, 'modules', 'window-interfacer'))(mainWindow);
+});
 
 app.on('window-all-closed', ()=> {
   if (process.platform !== 'darwin') {

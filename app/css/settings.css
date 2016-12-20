@@ -1,0 +1,19 @@
+body{
+  width: 600px;
+  height: 400px;
+  overflow: hidden;
+  border: 2px solid #fff;
+}
+
+md-toolbar{
+  -webkit-app-region: drag;
+}
+
+.blackborder{
+  position: fixed;
+  width: 598px;
+  height: 398px;
+  border: 2px #000 solid;
+  z-index: 999;
+  pointer-events: none;
+}
