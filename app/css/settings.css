@@ -75,8 +75,28 @@ label{
   overflow-y: auto;
 }
 
+.music-libraries ul li{
+  cursor: pointer;
+  width: 90%;
+  margin-top: 2px;
+}
+
 .music-libraries > div{
   background: #ddd;
+  padding: 0px;
+}
+
+.music-libraries ul li:hover{
+  background: #95B3F2;
+  color: #fff;
+  transition-duration: 250ms;
+}
+
+.music-libraries ul li:focus{
+  background: #5A8AEF;
+  color: #fff;
+  outline: none;
+  transition-duration: 250ms;
 }
 
 
@@ -92,13 +112,38 @@ footer{
 
 footer button{
   border: none;
-  color: #fff;
+  color: rgb(40,53,147);
   font-size: 14px;
-  background: rgb(40,53,147);
+  /*background: rgb(40,53,147);*/
+  background: none;
+  transition-duration: 250ms;
   padding: 3px 20px;
 }
 
 
 footer button:hover{
+  color: #fff;
+  transition-duration: 350ms;
   background: rgb(30,46,116);
+}
+
+.library-manipulation{
+  width: 30px;
+  height: 30px;
+  margin-left: 8px;
+  border: none;
+  margin-top: 5px;
+  background: none;
+  transition-duration: 250ms;
+}
+
+.library-manipulation .fa{
+  font-size: 20px;
+  line-height: initial;
+  color: #222;
+}
+
+.library-manipulation:hover{
+  transition-duration: 250ms;
+  background: #eee;
 }

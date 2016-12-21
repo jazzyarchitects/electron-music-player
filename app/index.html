@@ -33,7 +33,7 @@
       <center><input type="text" ng-model="searchQuery" placeholder="&#9906; Search" id="searchQuery" /></center>
       <div class="music-list">
         <div ng-repeat="song in currentSongs">
-          <a  ng-click="play($index)"><li class="song-item" ng-click="">{{song | extentionFixer}}</li></a>
+          <a  ng-click="play($index)"><li class="song-item" ng-click="">{{song.file | extentionFixer}}</li></a>
         </div>
       </div>
     </div>

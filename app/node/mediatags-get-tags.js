@@ -1,5 +1,6 @@
 "use strict";
 
+const fs = require('fs');
 const id3 = require('id3-parser');
 
 module.exports = function(filePath) {

@@ -10,6 +10,7 @@ const MusicLibrary = require(path.join(__dirname, '..', 'node', 'music-libraries
 
 app.controller('SettingsController', ($scope)=>{
   $scope.musicLibraries = [];
+  $scope.currentDirectory = "";
 
   $scope.init = function(){
     $scope.musicLibraries = MusicLibrary.getAll();
@@ -33,8 +34,27 @@ app.controller('SettingsController', ($scope)=>{
     });
   });
 
+  $scope.setCurrent = function(lib){
+    if($scope.currentDirectory===''){
+      $scope.currentDirectory = lib;
+    }else{
+      $scope.currentDirectory = '';
+    }
+
+  }
+
+  $scope.removeDirectory = function(){
+    if($scope.currentDirectory===''){
+      return;
+    }
+    let index = $scope.musicLibraries.indexOf($scope.currentDirectory);
+    $scope.musicLibraries.splice(index,1);
+    $scope.currentDirectory = '';
+  }
+
   $scope.close = function(){
     MusicLibrary.save($scope.musicLibraries);
+    ipcRenderer.send('Change', {type: 'MusicLibrary', data: $scope.musicLibraries});
     closeWindow();
   }
 

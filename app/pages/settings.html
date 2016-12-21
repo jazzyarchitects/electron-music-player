@@ -17,7 +17,7 @@
       <span flex="">
       </span>
       <div class="buttons">
-      <i class="fa fa-close" onclick="closeWindow()"></i>
+      <i class="fa fa-close" ng-click="close()"></i>
       </div>
     </div>
   </md-toolbar>
@@ -28,10 +28,11 @@
     <label for="music_libraries" id="music-libraries-label" flex="20">Music Libraries</label>
     <div class="music-libraries" flex="80" layout="row">
       <ul flex="90">
-        <li ng-repeat="library in musicLibraries">{{ library }}</li>
+        <li ng-repeat="library in musicLibraries" ng-click="setCurrent(library)">{{ library }}</li>
       </ul>
       <div flex="10">
-        <button ng-click="addLibrary()"><i class="fa fa-plus-square"></i></button>
+        <button ng-click="addLibrary()" class="library-manipulation"><i class="fa fa-plus-square"></i></button>
+        <button ng-click="removeDirectory()" ng-hide="currentDirectory===''" class="library-manipulation"><i class="fa fa-trash"></i></button>
       </div>
     </div>
   </div>
@@ -51,6 +52,7 @@
 <!-- Angular Material Library -->
 <script src="../../bower_components/angular-material/angular-material.min.js"></script>
 <script src="../js/settings.js"></script>
-<script src="../js/window-interfacer-settings.js"></script>
+<script type="text/javascript" src="../js/window-interfacer-settings.js"></script>
+
 </body>
 </html>

@@ -32,4 +32,13 @@ module.exports = function(mainWindow){
       break;
     }
   });
+
+  ipcMain.on('Change', (event, arg)=>{
+    switch(arg.type){
+      case 'MusicLibrary':
+        mainWindow.webContents.send('Change', arg);
+      default:
+        break;
+    }
+  });
 };

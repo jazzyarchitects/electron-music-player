@@ -4,9 +4,9 @@ const path = require('path');
 
 const readFileFromDirectory = require('./node/read-file-from-directory');
 const readMediaTags = require('./node/mediatags-get-tags.js');
-const assignShortcuts = require('./node/shortcuts');
+const assignInterfacer = require('./node/main-interfacer');
 
-const MUSIC_LIB = "/home/jibin/Music";
+// const MUSIC_LIB = "/home/jibin/Music";
 
 let app = angular.module('MusicPlayer', ['ngMaterial']);
 let audio = null;
@@ -47,7 +47,8 @@ app.controller('MainController', ($scope)=>{
 
   /* Initial loading from the music directory */
   $scope.init = ()=>{
-    $scope.songs = readFileFromDirectory(MUSIC_LIB);
+    $scope.songs = readFileFromDirectory();
+    console.log($scope.songs);
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
     $scope.playListSize = $scope.currentSongs.length;
   };
@@ -61,13 +62,15 @@ app.controller('MainController', ($scope)=>{
     if(index!==undefined) {
       audio = null;
       $scope.currentSong.index = index;
-      $scope.currentSong.name = $scope.currentSongs[index];
-      songPath = "file://"+MUSIC_LIB+"/"+$scope.currentSong.name;
+      $scope.currentSong.name = $scope.currentSongs[index].file;
+      $scope.currentSong.directory = $scope.currentSongs[index].directory;
+      songPath = "file://"+$scope.currentSongs[index].directory + '/' + $scope.currentSong.name;
     }else{
       if(audio===null) {
-        $scope.currentSong.name = $scope.currentSongs[0];
+        $scope.currentSong.name = $scope.currentSongs[0].file;
         $scope.currentSong.index = 0;
-        songPath = "file://"+MUSIC_LIB+"/"+$scope.currentSongs[0];
+        $scope.currentSong.directory = $scope.currentSongs[0].directory;
+        songPath = "file://"+$scope.currentSongs[0].directory + '/' + $scope.currentSongs[0].file;
       }
     }
 
@@ -75,7 +78,7 @@ app.controller('MainController', ($scope)=>{
       return;   /*  Error assigning file  */
     }else if(audio===null) {
       audio = new Audio(songPath);
-      readMediaTags(path.join(MUSIC_LIB, $scope.currentSong.name))
+      readMediaTags(path.join($scope.currentSong.directory, $scope.currentSong.name))
       .then((tag)=>{
         $scope.currentSong.album = tag.album;
         $scope.currentSong.artist = tag.artist;
@@ -228,7 +231,7 @@ app.controller('MainController', ($scope)=>{
     }
   }
 
-  assignShortcuts($scope);
+  assignInterfacer($scope);
 });
 
 
@@ -260,6 +263,6 @@ function getRandomIndexNotIn(arrayLength, usedList) {
 function liveSearchFilter(query) {
   return function(el) {
     let regex = new RegExp(query, 'g');
-    return regex.test(el);
+    return regex.test(el.file);
   }
 }

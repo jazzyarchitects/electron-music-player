@@ -12,10 +12,10 @@ A desktop music player built using Electron.
 * Repeat and Shuffle
 * Keyboard Shortcuts: Ctrl+(Up, Down, Left, Right, Shift+(Left, Right)), MediaPlay, MediaNext, MediaPrev
 * Realtime Searching from songs
-
-### Features Coming Soon
 * Make Music Library Changeable
 * Multiple Music Libraries
+
+### Features Coming Soon
 * Settings
 
 ### Planned
