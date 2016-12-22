@@ -10,7 +10,6 @@ module.exports = function(directory) {
   if(!directory){
     directory = MusicLibrary.getAll();
   }
-  console.log(directory);
   let files = [];
   if(typeof(directory)==="string"){
     fs.readdirSync(MUSIC_LIB).forEach((fileName)=>{

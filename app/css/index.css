@@ -20,6 +20,23 @@ body{
   border: 2px #fff solid;
 }
 
+.fa{
+  color: #ccc;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 50px;
+  transition-duration: 250ms;
+}
+
+.fa:hover{
+  color: #fff;
+  transition-duration: 250ms;
+}
+
+i:focus{
+  outline: none;
+}
+
 .blackborder{
   position: fixed;
   width: 798px;
@@ -67,6 +84,32 @@ input:focus{
   outline: none;
 }
 
+.playlist-buttons-div{
+  height: 30px;
+  width: 100%;
+}
+
+.playlist-button button{
+  padding: 2.5px 0;
+  width: 100%;
+  margin: 0 auto;
+  background: none;
+  border: none;
+  align-content: center;
+}
+
+.playlist-button .fa{
+  color: #ddd;
+  font-size: 16px;
+  line-height: initial;
+}
+
+.playlist-button .fa:hover{
+  color: #fff;
+  transform: scale(1.1,1.1);
+  transition-duration: 250ms;
+}
+
 .music-list-holder{
   /*background: url('../img/background.jpeg');*/
   background: #18226A;
@@ -74,7 +117,7 @@ input:focus{
 }
 
 .music-list{
-  height: 510px;
+  height: 480px;
   list-style: none;
   overflow-y: auto;
 }
@@ -151,23 +194,12 @@ input:focus{
   border: 1px solid #000;
 }
 
-.fa{
-  color: #ccc;
-  font-size: 24px;
-  cursor: pointer;
-  line-height: 50px;
-  transition-duration: 250ms;
-}
 
 .fa-play-circle, .fa-pause-circle{
   font-size: 48px;
   line-height: 50px;
 }
 
-.fa:hover{
-  color: #fff;
-  transition-duration: 250ms;
-}
 
 /* Prev, Play, Next Buttons */
 .control:nth-child(2), .control:nth-child(1){
@@ -257,9 +289,6 @@ md-slider-container{
   height: 65px;
 }
 
-i:focus{
-  outline: none;
-}
 
 .volume-control-holder md-slider-container{
   padding-left: 8px;

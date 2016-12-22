@@ -48,7 +48,6 @@ app.controller('MainController', ($scope)=>{
   /* Initial loading from the music directory */
   $scope.init = ()=>{
     $scope.songs = readFileFromDirectory();
-    console.log($scope.songs);
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
     $scope.playListSize = $scope.currentSongs.length;
   };

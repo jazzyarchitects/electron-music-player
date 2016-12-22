@@ -117,6 +117,7 @@ footer button{
   /*background: rgb(40,53,147);*/
   background: none;
   transition-duration: 250ms;
+  box-shadow: 0px 0px 5px #ddd;
   padding: 3px 20px;
 }
 
@@ -124,6 +125,7 @@ footer button{
 footer button:hover{
   color: #fff;
   transition-duration: 350ms;
+  box-shadow: 0px 0px 5px #000;
   background: rgb(30,46,116);
 }
 
