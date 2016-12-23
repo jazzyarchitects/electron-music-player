@@ -33,7 +33,7 @@ body{
   transition-duration: 250ms;
 }
 
-i:focus{
+button:focus, i:focus{
   outline: none;
 }
 
@@ -58,6 +58,10 @@ i:focus{
 .fa{
   font-size: 15px;
   -webkit-app-region: no-drag;
+}
+
+md-toolbar .fa{
+  font-size: 24px;
 }
 
 .main{
@@ -106,8 +110,7 @@ input:focus{
 
 .playlist-button .fa:hover{
   color: #fff;
-  transform: scale(1.1,1.1);
-  transition-duration: 250ms;
+  transform: scale(1.2,1.2);
 }
 
 .music-list-holder{
@@ -144,19 +147,35 @@ input:focus{
   background: rgba(255,0,0,0.4);
 }
 
-.song-item{
-  padding: 5px;
-  color: #eeeeee;
+.song-item-holder{
   background: rgba(0,0,0,0.4);
-  transition-duration: 500ms;
-  cursor: pointer;
-  font-size: 14px;
   margin-bottom: 1px;
 }
 
-.song-item:hover, .song-item-active{
+/*.song-item-holder:hover{
+
+}*/
+
+.song-item{
+  padding: 5px;
+  color: #eeeeee;
+  transition-duration: 500ms;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.song-item .fa{
+  text-align: center;
+  line-height: initial;
+}
+
+/*.song-item:hover, */.song-item-active, .song-item-holder:hover{
   background: rgba(0,0,0,0.9);
   transition-duration: 500ms;
+}
+
+.song-item{
+  background: initial;
 }
 
 .song-item:focus{

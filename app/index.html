@@ -7,11 +7,11 @@
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body ng-controller="MainController" ng-init="init()">
-<div class="blackborder"></div>
+  <div class="blackborder"></div>
 
   <md-toolbar class="md-hue-2 toolbar">
     <div class="md-toolbar-tools">
-    <i class="fa fa-cog" onclick="showSettings()"></i>&nbsp;&nbsp;
+      <i class="fa fa-cog" onclick="showSettings()"></i>&nbsp;&nbsp;
       <h2>
         <span>MUSIC PLAYER</span>
       </h2>
@@ -19,8 +19,8 @@
 
       </span>
       <div class="buttons">
-      <i class="fa fa-window-minimize" onclick="minimize()"></i>&nbsp;&nbsp;
-      <i class="fa fa-close" onclick="closeWindow()"></i>
+        <i class="fa fa-window-minimize" onclick="minimize()"></i>&nbsp;&nbsp;
+        <i class="fa fa-close" onclick="closeWindow()"></i>
       </div>
     </div>
   </md-toolbar>
@@ -49,8 +49,15 @@
       </div>
 
       <div class="music-list">
-        <div ng-repeat="song in currentSongs">
-          <a  ng-click="play($index)"><li class="song-item" ng-click="">{{song.file | extentionFixer}}</li></a>
+        <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
+          <a  ng-click="play($index)" flex="90">
+            <div class="song-item" ng-click="">
+              {{song.file | extentionFixer}}
+            </div>
+          </a>
+          <div class="song-item" flex="10">
+            <i class="fa fa-caret-down"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -104,14 +111,14 @@
         </md-slider-container>
       </div>
       <div layout="row" flex="100">
-      <p>{{ currentSong.name | extentionFixer}}</p>
+        <p>{{ currentSong.name | extentionFixer}}</p>
       </div>
       <div layout="row" flex="100" class="volume-control-holder">
-          <i class="fa fa-volume-down" ng-click="decreaseVolume()"></i>
-      <md-slider-container>
+        <i class="fa fa-volume-down" ng-click="decreaseVolume()"></i>
+        <md-slider-container>
           <md-slider min="0" max="100" class="md-primary md-hue-4" ng-model="player.volume" step="5" type="range" name="volume-seekbar" id="volume-seekbar" ng-mouseup="changeVolume()"></md-slider>
         </md-slider-container>
-          <i class="fa fa-volume-up" ng-click="increaseVolume()"></i>
+        <i class="fa fa-volume-up" ng-click="increaseVolume()"></i>
       </div>
     </div>
   </div>
