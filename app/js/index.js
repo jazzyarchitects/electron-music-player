@@ -14,9 +14,20 @@ let audio = null;
 const PLAY_CLASS = "fa-play-circle";
 const PAUSE_CLASS = "fa-pause-circle";
 
+const PLAYLIST_VIEW = 0;
+const ALBUM_VIEW = 1;
+const ALL_VIEW = 2;
+const FOLDER_VIEW = 3;
+
 app.controller('MainController', ($scope)=>{
   /* Basic environment setup */
+
+  $scope.currentView = 2;
+
   $scope.songs = [];
+  $scope.folderSorted = [];
+  $scope.tempList = [];
+  $scope.albumSorted = [];
   $scope.currentSongs = [];
   $scope.currentSong = {
     name: "",
@@ -50,6 +61,16 @@ app.controller('MainController', ($scope)=>{
     $scope.songs = readFileFromDirectory();
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
     $scope.playListSize = $scope.currentSongs.length;
+
+    let folderSorterWorker = new Worker(path.join(__dirname, 'js', 'folder-sorter.js'));
+    folderSorterWorker.addEventListener('message', (e)=>{
+      // console.log("Folder Sorted");
+      // console.log(e.data)
+      $scope.$apply(()=>{
+        $scope.folderSorted = e.data;
+      })
+    });
+    folderSorterWorker.postMessage($scope.songs);
   };
 
   /* Function to play a selected audio file, or the previously paused*/
@@ -228,6 +249,22 @@ app.controller('MainController', ($scope)=>{
       audio.currentTime = a;
       $scope.player.currentTime = audio.currentTime;
     }
+  }
+
+  $scope.showFolders = function(){
+    $scope.currentView = FOLDER_VIEW;
+  }
+
+  $scope.showAll = function(){
+    $scope.currentView = ALL_VIEW;
+  }
+
+  $scope.showAlbums = function(){
+    $scope.currentView = ALBUM_VIEW;
+  }
+
+  $scope.showPlaylists = function(){
+    $scope.currentView = PLAYLIST_VIEW;
   }
 
   assignInterfacer($scope);

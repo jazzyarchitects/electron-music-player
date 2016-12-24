@@ -164,12 +164,21 @@ input:focus{
   font-size: 14px;
 }
 
-.song-item .fa{
+.directory-item{
+  padding: 5px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  background: rgba(0,0,0,0.75);
+}
+
+
+.music-list .fa{
   text-align: center;
   line-height: initial;
 }
 
-/*.song-item:hover, */.song-item-active, .song-item-holder:hover{
+.song-item-active, .song-item-holder:hover{
   background: rgba(0,0,0,0.9);
   transition-duration: 500ms;
 }
@@ -180,6 +189,15 @@ input:focus{
 
 .song-item:focus{
   outline: none;
+}
+
+.directory-item-holder .song-item{
+padding-left: 15px;
+}
+
+.directory-item-holder .song-item-holder:hover{
+  background: rgba(0,0,0,0.7);;
+  transition-duration: 500ms;
 }
 
 .player-extras{

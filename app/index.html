@@ -49,14 +49,34 @@
       </div>
 
       <div class="music-list">
-        <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
-          <a  ng-click="play($index)" flex="90">
-            <div class="song-item" ng-click="">
-              {{song.file | extentionFixer}}
+
+        <!-- All Songs -->
+        <div ng-if="currentView===2">
+          <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
+            <a  ng-click="play($index)" flex="90">
+              <div class="song-item">
+                {{song.file | extentionFixer}}
+              </div>
+            </a>
+            <div class="song-item" flex="10">
+              <i class="fa fa-caret-down"></i>
             </div>
-          </a>
-          <div class="song-item" flex="10">
-            <i class="fa fa-caret-down"></i>
+          </div>
+        </div>
+
+        <!-- Folder View -->
+        <div ng-if="currentView===3">
+          <div ng-repeat="folder in folderSorted" class="directory-item-holder">
+            <div class="directory-item">
+              <i class="fa fa-folder"></i>&nbsp;&nbsp;<u>{{ folder.directory | directoryNameFixer}}</u>
+            </div>
+            <div ng-repeat="song in folder.songs" class="song-item-holder">
+              <a  ng-click="">
+                <div class="song-item">
+                  {{song | extentionFixer}}
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -133,7 +153,10 @@
 <!-- Angular Material Library -->
 <script src="../bower_components/angular-material/angular-material.min.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
+
+<!-- Custom Angular filters -->
 <script src="js/song-name-replacer-filter.js"></script>
+<script src="js/directory-name-replacer-filter.js"></script>
 <script src="js/time-converter.js"></script>
 
 <script type="text/javascript" src="js/window-interfacer.js"></script>
