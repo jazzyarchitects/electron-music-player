@@ -20,6 +20,4 @@ self.addEventListener('message', (e)=>{
     });
   }
   self.postMessage(f);
-
-
 });

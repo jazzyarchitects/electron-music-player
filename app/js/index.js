@@ -5,6 +5,7 @@ const path = require('path');
 const readFileFromDirectory = require('./node/read-file-from-directory');
 const readMediaTags = require('./node/mediatags-get-tags.js');
 const assignInterfacer = require('./node/main-interfacer');
+const albumSorter = require('./node/album-sorter');
 
 // const MUSIC_LIB = "/home/jibin/Music";
 
@@ -20,8 +21,8 @@ const ALL_VIEW = 2;
 const FOLDER_VIEW = 3;
 
 app.controller('MainController', ($scope)=>{
-  /* Basic environment setup */
 
+  /* Basic environment setup */
   $scope.currentView = 2;
 
   $scope.songs = [];
@@ -48,6 +49,7 @@ app.controller('MainController', ($scope)=>{
     playedIndices: []
   };
 
+  // Watching currentSongs list (changes with search Query) to change playListSize required in next() and prev() functions
   $scope.$watch('currentSongs', ()=>{
     $scope.playListSize = $scope.currentSongs.length;
   });
@@ -62,15 +64,29 @@ app.controller('MainController', ($scope)=>{
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
     $scope.playListSize = $scope.currentSongs.length;
 
+    /*
+    *  Sorting songs according to album and folder in different threads so that main thread in not blocked
+    */
+
+    // Sorting folder wise in a different worker thread
     let folderSorterWorker = new Worker(path.join(__dirname, 'js', 'folder-sorter.js'));
     folderSorterWorker.addEventListener('message', (e)=>{
-      // console.log("Folder Sorted");
-      // console.log(e.data)
       $scope.$apply(()=>{
         $scope.folderSorted = e.data;
       })
     });
     folderSorterWorker.postMessage($scope.songs);
+
+    //Album Sorter cannot work in Worker. Instead using setTimeout to access node folder and run async
+    setTimeout(()=>{
+      albumSorter($scope.songs)
+      .then((f)=>{
+        $scope.$apply(()=>{
+          $scope.albumSorted = f;
+        });
+      });
+    },0);
+
   };
 
   /* Function to play a selected audio file, or the previously paused*/
@@ -79,6 +95,8 @@ app.controller('MainController', ($scope)=>{
       $scope.pause();
     }
     let songPath = undefined;
+
+    // If index undefined i.e. Directly clicking play button without selecting song, then play first song else play selected song
     if(index!==undefined) {
       audio = null;
       $scope.currentSong.index = index;
@@ -97,6 +115,7 @@ app.controller('MainController', ($scope)=>{
     if(songPath===undefined && audio===null) {
       return;   /*  Error assigning file  */
     }else if(audio===null) {
+      // No audio has been paused. Either audio is never assigned or has been stopped.
       audio = new Audio(songPath);
       readMediaTags(path.join($scope.currentSong.directory, $scope.currentSong.name))
       .then((tag)=>{
@@ -142,6 +161,7 @@ app.controller('MainController', ($scope)=>{
     if(audio!==null) {
       audio.play();
     }
+
     $scope.player.playClass = PAUSE_CLASS;
     $scope.isPlaying = true;
   }
@@ -238,6 +258,7 @@ app.controller('MainController', ($scope)=>{
     $scope.changeVolume();
   }
 
+  // To seek the current media by seekTime amount. Checking the audio timing constraints
   $scope.seekMedia = function(seekTime) {
     if(audio!==null) {
       let a = audio.currentTime + seekTime;
@@ -251,20 +272,9 @@ app.controller('MainController', ($scope)=>{
     }
   }
 
-  $scope.showFolders = function(){
-    $scope.currentView = FOLDER_VIEW;
-  }
-
-  $scope.showAll = function(){
-    $scope.currentView = ALL_VIEW;
-  }
-
-  $scope.showAlbums = function(){
-    $scope.currentView = ALBUM_VIEW;
-  }
-
-  $scope.showPlaylists = function(){
-    $scope.currentView = PLAYLIST_VIEW;
+  // Selecting different views (Playlist, Album, All or Folders)
+  $scope.changeView = function(view){
+    $scope.currentView = view;
   }
 
   assignInterfacer($scope);
@@ -287,6 +297,7 @@ function getPrevIndex(i, arrayLength) {
   return i;
 }
 
+// Get a random index which has not been played yet
 function getRandomIndexNotIn(arrayLength, usedList) {
   let a = Math.floor(Math.random()*arrayLength);
   if(usedList.indexOf(a)===-1) {

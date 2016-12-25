@@ -35,20 +35,38 @@
 
       <div layout="row" flex="100" class="playlist-buttons-div">
         <div class="playlist-button" flex="25">
-          <button ng-click="showPlayLists()" title="Playlist"><i class="fa fa-list-alt"></i></button>
+          <button ng-click="changeView(0)" title="Playlist"><i class="fa fa-list-alt"></i></button>
         </div>
         <div class="playlist-button" flex="25">
-          <button ng-click="showAlbums()" title="Albums"><i class="fa fa-th-large"></i></button>
+          <button ng-click="changeView(1)" title="Albums"><i class="fa fa-th-large"></i></button>
         </div>
         <div class="playlist-button" flex="25">
-          <button ng-click="showAll()" title="All Songs"><i class="fa fa-list-ul"></i></button>
+          <button ng-click="changeView(2)" title="All Songs"><i class="fa fa-list-ul"></i></button>
         </div>
         <div class="playlist-button" flex="25">
-          <button ng-click="showFolders()" title="Folders"><i class="fa fa-folder"></i></button>
+          <button ng-click="changeView(3)" title="Folders"><i class="fa fa-folder"></i></button>
         </div>
       </div>
 
       <div class="music-list">
+
+        <!-- Album View -->
+        <div ng-if="currentView===1">
+          <div ng-repeat="album in albumSorted" class="directory-item-holder md-accordion">
+            <div class="directory-item" ng-init="album.expanded=false" ng-click="album.expanded=!album.expanded">
+              <i class="fa fa-book"></i>&nbsp;&nbsp;<u>{{ album.album }}</u>
+            </div>
+            <div ng-class="{dataContent:true, activeContent:album.expanded}">
+              <div ng-repeat="song in album.songs" class="song-item-holder">
+                <a  ng-click="">
+                  <div class="song-item">
+                    {{ song.song }}
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- All Songs -->
         <div ng-if="currentView===2">
@@ -79,6 +97,8 @@
             </div>
           </div>
         </div>
+
+
       </div>
     </div>
 
