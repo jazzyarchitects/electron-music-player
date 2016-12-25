@@ -46,6 +46,73 @@ button:focus, i:focus{
   pointer-events: none;
 }
 
+/* Accordion menu */
+
+.md-accordion .expandCollapse {
+  width:30px;
+  height:30px;
+  position:relative;
+  font-size:20px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#fff;
+  display:block;
+  margin-top: -2px;
+  margin-left: -2px;
+  overflow:hidden;
+}
+.md-accordion .expandCollapse:active {
+  border:0px;
+}
+.md-accordion .expandCollapse:before, .md-accordion .expandCollapse:after {
+  width:30px;
+  height:30px;
+  display:block;
+  position:absolute;
+  top:0; left:0;
+  line-height:32px;
+  text-align:center;
+  -webkit-transition: .3s all ease-out;
+  transition: .3s all ease-out;
+}
+.md-accordion .expandCollapse:before {
+  opacity:1
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0deg);
+  content: "|";
+  margin-top:-3px;
+}
+.md-accordion .expandCollapse:after {
+  opacity:1;
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  content: "|";
+  margin-left:-3px;
+}
+.md-accordion .active:before {
+  opacity:1;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+  margin-left:3px;
+  margin-top:0px;
+}
+
+.md-accordion .dataContent {
+  height:0px;
+  overflow:hidden;
+  -webkit-transition: .3s all ease-out;
+  transition: .3s all ease-out;
+
+}
+
+.md-accordion .activeContent {
+  height: auto;
+  display:block;
+  /*-webkit-transition: 500ms all;*/
+}
+
+/* End of accordion */
+
 /*
   ActionBar heigt: 56px;
 */
@@ -164,12 +231,22 @@ input:focus{
   font-size: 14px;
 }
 
+.md-accordion .directory-item .dataContent{
+  margin-bottom: 0px;
+}
+
 .directory-item{
+  margin-bottom: 1px;
   padding: 5px;
   color: #fff;
   font-weight: bold;
   font-size: 14px;
+  cursor: pointer;
   background: rgba(0,0,0,0.75);
+}
+
+.directory-item:focus{
+  outline: none;
 }
 
 

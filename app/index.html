@@ -70,7 +70,7 @@
 
         <!-- All Songs -->
         <div ng-if="currentView===2">
-          <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
+        <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
             <a  ng-click="play($index)" flex="90">
               <div class="song-item">
                 {{song.file | extentionFixer}}
@@ -83,17 +83,19 @@
         </div>
 
         <!-- Folder View -->
-        <div ng-if="currentView===3">
+        <div ng-if="currentView===3" class="md-accordion">
           <div ng-repeat="folder in folderSorted" class="directory-item-holder">
-            <div class="directory-item">
+            <div class="directory-item" ng-init="folder.expanded=false" ng-click="folder.expanded=!folder.expanded">
               <i class="fa fa-folder"></i>&nbsp;&nbsp;<u>{{ folder.directory | directoryNameFixer}}</u>
             </div>
+            <div  ng-class="{dataContent:true, activeContent:folder.expanded}">
             <div ng-repeat="song in folder.songs" class="song-item-holder">
               <a  ng-click="">
                 <div class="song-item">
                   {{song | extentionFixer}}
                 </div>
               </a>
+            </div>
             </div>
           </div>
         </div>
