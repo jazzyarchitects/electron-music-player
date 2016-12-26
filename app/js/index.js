@@ -387,7 +387,7 @@ function getRandomIndexNotIn(arrayLength, usedList) {
 
 function liveSearchFilter(query) {
   return function(el) {
-    let regex = new RegExp(query, 'g');
-    return regex.test(el.file);
+    let regex = new RegExp(query.toLowerCase(), 'g');
+    return regex.test(el.file.toLowerCase());
   }
 }

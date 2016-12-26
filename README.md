@@ -1,7 +1,7 @@
 # Music Player
 A desktop music player built using Electron.
 
-## Screenshot (As of Dec 19 2016)
+## Screenshot (As of Dec 26 2016)
 ![Screenshot](https://github.com/jazzyarchitects/electron-music-player/blob/master/images/dec26.png)
 
 ## Working Features
