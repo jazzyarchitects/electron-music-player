@@ -2,7 +2,7 @@
 A desktop music player built using Electron.
 
 ## Screenshot (As of Dec 19 2016)
-![Screenshot](https://github.com/jazzyarchitects/electron-music-player/blob/master/images/dec19.png)
+![Screenshot](https://github.com/jazzyarchitects/electron-music-player/blob/master/images/dec26.png)
 
 ## Working Features
 * Playing MP3 files (Default location: /home/jibin/Music )
@@ -10,17 +10,16 @@ A desktop music player built using Electron.
 * Extract album art from audio file
 * Change volume using seekbar and buttons
 * Repeat and Shuffle
-* Keyboard Shortcuts: Ctrl+(Up, Down, Left, Right, Shift+(Left, Right)), MediaPlay, MediaNext, MediaPrev
+* Keyboard Shortcuts: MediaPlay, MediaNext, MediaPrev
 * Realtime Searching from songs
-* Make Music Library Changeable
 * Multiple Music Libraries
+* Group By Album and Folders
 
 ### Features Coming Soon
 * Settings
+* Playlist
 
 ### Planned
-* Playlist
-* Group By
 * Visualizations
 
 ### Maybe I will add (long term)

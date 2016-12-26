@@ -58,7 +58,7 @@
             </div>
             <div ng-class="{dataContent:true, activeContent:album.expanded}">
               <div ng-repeat="song in album.songs" class="song-item-holder">
-                <a  ng-click="">
+                <a ng-click="play($parent.$index, $index)">
                   <div class="song-item">
                     {{ song.song }}
                   </div>
@@ -90,9 +90,9 @@
             </div>
             <div  ng-class="{dataContent:true, activeContent:folder.expanded}">
             <div ng-repeat="song in folder.songs" class="song-item-holder">
-              <a  ng-click="">
+              <a  ng-click="play($parent.$index, $index)">
                 <div class="song-item">
-                  {{song | extentionFixer}}
+                  {{song.song | extentionFixer}}
                 </div>
               </a>
             </div>

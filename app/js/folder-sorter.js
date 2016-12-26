@@ -10,7 +10,7 @@ self.addEventListener('message', (e)=>{
       foldersList.push(song.directory);
       folders[song.directory] = [];
     }
-    folders[song.directory].push(song.file);
+    folders[song.directory].push({directory: song.directory, song: song.file});
   }
   let f = [];
   for(let folder of Object.keys(folders)){

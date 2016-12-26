@@ -30,6 +30,7 @@ app.controller('MainController', ($scope)=>{
   $scope.tempList = [];
   $scope.albumSorted = [];
   $scope.currentSongs = [];
+  $scope.currentPlaylist = [];
   $scope.currentSong = {
     name: "",
     index: 0,
@@ -62,8 +63,8 @@ app.controller('MainController', ($scope)=>{
   $scope.init = ()=>{
     $scope.songs = readFileFromDirectory();
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
-    $scope.playListSize = $scope.currentSongs.length;
-
+    $scope.currentPlaylist = $scope.currentSongs;
+    $scope.playListSize = $scope.currentPlaylist.length;
     /*
     *  Sorting songs according to album and folder in different threads so that main thread in not blocked
     */
@@ -71,6 +72,8 @@ app.controller('MainController', ($scope)=>{
     // Sorting folder wise in a different worker thread
     let folderSorterWorker = new Worker(path.join(__dirname, 'js', 'folder-sorter.js'));
     folderSorterWorker.addEventListener('message', (e)=>{
+      // console.log("Folder Sorted");
+      // console.log(e.data);
       $scope.$apply(()=>{
         $scope.folderSorted = e.data;
       })
@@ -81,6 +84,8 @@ app.controller('MainController', ($scope)=>{
     setTimeout(()=>{
       albumSorter($scope.songs)
       .then((f)=>{
+        // console.log("Album Sorted");
+        // console.log(f);
         $scope.$apply(()=>{
           $scope.albumSorted = f;
         });
@@ -90,25 +95,61 @@ app.controller('MainController', ($scope)=>{
   };
 
   /* Function to play a selected audio file, or the previously paused*/
-  $scope.play = function(index) {
-    if($scope.isPlaying) {
+  $scope.play = function(parentIndex, index) {
+    if(index===undefined){
+      index = parentIndex;
+      parentIndex = undefined;
+    }
+    if($scope.isPlaying && parentIndex===undefined && index===undefined) {
       $scope.pause();
+      return;
     }
     let songPath = undefined;
 
     // If index undefined i.e. Directly clicking play button without selecting song, then play first song else play selected song
-    if(index!==undefined) {
+    // For All songs list
+    if(index!==undefined && parentIndex===undefined) {
       audio = null;
       $scope.currentSong.index = index;
-      $scope.currentSong.name = $scope.currentSongs[index].file;
-      $scope.currentSong.directory = $scope.currentSongs[index].directory;
-      songPath = "file://"+$scope.currentSongs[index].directory + '/' + $scope.currentSong.name;
+      $scope.currentSong.name = $scope.currentPlaylist[index].file || $scope.currentPlaylist[index].song;
+      $scope.currentSong.directory = $scope.currentPlaylist[index].directory;
+      songPath = "file://"+$scope.currentPlaylist[index].directory + '/' + $scope.currentSong.name;
+    }else if(index!==undefined && parentIndex!==undefined){
+      let actualIndex = 0;
+      switch($scope.currentView){
+        case ALBUM_VIEW:
+          for(let i=0;i<$scope.albumSorted.length;i++){
+            if(i<parentIndex){
+              actualIndex += $scope.albumSorted[i].songs.length;
+            }else if(i===parentIndex){
+              actualIndex += index;
+              return $scope.play(actualIndex);
+            }else{
+              return $scope.play();
+            }
+          }
+        break;
+        case FOLDER_VIEW:
+          for(let i=0;i<$scope.folderSorted.length;i++){
+            if(i<parentIndex){
+              actualIndex += $scope.folderSorted[i].songs.length;
+            }else if(i===parentIndex){
+              actualIndex += index;
+              return $scope.play(actualIndex);
+            }else{
+              return $scope.play();
+            }
+          }
+        break;
+        default:
+        break;
+      }
     }else{
       if(audio===null) {
-        $scope.currentSong.name = $scope.currentSongs[0].file;
+        $scope.currentSong.name = $scope.currentPlaylist[0].file;
         $scope.currentSong.index = 0;
-        $scope.currentSong.directory = $scope.currentSongs[0].directory;
-        songPath = "file://"+$scope.currentSongs[0].directory + '/' + $scope.currentSongs[0].file;
+        $scope.currentSong.directory = $scope.currentPlaylist[0].directory;
+        songPath = "file://"+$scope.currentPlaylist[0].directory + '/' + $scope.currentPlaylist[0].file;
       }
     }
 
@@ -274,7 +315,31 @@ app.controller('MainController', ($scope)=>{
 
   // Selecting different views (Playlist, Album, All or Folders)
   $scope.changeView = function(view){
+    // Prevent unnecessary functions if current button is pressed again
+    if(view === $scope.currentView){
+      return;
+    }
     $scope.currentView = view;
+    let parentList = $scope.currentSongs;
+    switch(view){
+      case ALBUM_VIEW:
+        parentList = $scope.albumSorted;
+        break;
+      case FOLDER_VIEW:
+        parentList = $scope.folderSorted;
+        break;
+      case ALL_VIEW:
+        $scope.currentPlaylist = $scope.currentSongs;
+      default:
+        return;
+    }
+    $scope.currentPlaylist = [];
+    for(let i=0;i<parentList.length;i++){
+      for(let j=0;j<parentList[i].songs.length;j++){
+        $scope.currentPlaylist.push(parentList[i].songs[j]);
+      }
+    }
+    // console.log($scope.currentPlaylist);
   }
 
   assignInterfacer($scope);
