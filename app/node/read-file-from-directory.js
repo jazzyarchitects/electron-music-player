@@ -28,6 +28,9 @@ module.exports = function(directory) {
 
 function readDir(dirname){
   let files = [];
+  if(!fs.existsSync(dirname)){
+    return [];
+  }
   fs.readdirSync(dirname).forEach((file)=>{
     let filePath = path.join(dirname, file);
     let stat = fs.lstatSync(filePath);

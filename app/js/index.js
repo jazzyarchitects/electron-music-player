@@ -122,31 +122,12 @@ app.controller('MainController', ($scope)=>{
       $scope.currentSong.directory = $scope.currentPlaylist[index].directory;
       songPath = "file://"+$scope.currentPlaylist[index].directory + '/' + $scope.currentSong.name;
     }else if(index!==undefined && parentIndex!==undefined){
-      let actualIndex = 0;
       switch($scope.currentView){
         case ALBUM_VIEW:
-          for(let i=0;i<$scope.albumSorted.length;i++){
-            if(i<parentIndex){
-              actualIndex += $scope.albumSorted[i].songs.length;
-            }else if(i===parentIndex){
-              actualIndex += index;
-              return $scope.play(actualIndex);
-            }else{
-              return $scope.play();
-            }
-          }
+          $scope.play(getActualIndex(parentIndex, index, $scope.albumSorted));
         break;
         case FOLDER_VIEW:
-          for(let i=0;i<$scope.folderSorted.length;i++){
-            if(i<parentIndex){
-              actualIndex += $scope.folderSorted[i].songs.length;
-            }else if(i===parentIndex){
-              actualIndex += index;
-              return $scope.play(actualIndex);
-            }else{
-              return $scope.play();
-            }
-          }
+          $scope.play(getActualIndex(parentIndex, index, $scope.folderSorted));
         break;
         default:
         break;
@@ -336,15 +317,15 @@ app.controller('MainController', ($scope)=>{
     let parentList = $scope.currentSongs;
     switch(view){
       case ALBUM_VIEW:
-        parentList = $scope.albumSorted;
-        break;
+      parentList = $scope.albumSorted;
+      break;
       case FOLDER_VIEW:
-        parentList = $scope.folderSorted;
-        break;
+      parentList = $scope.folderSorted;
+      break;
       case ALL_VIEW:
-        $scope.currentPlaylist = $scope.currentSongs;
+      $scope.currentPlaylist = $scope.currentSongs;
       default:
-        return;
+      return;
     }
     $scope.currentPlaylist = [];
     for(let i=0;i<parentList.length;i++){
@@ -385,9 +366,26 @@ function getRandomIndexNotIn(arrayLength, usedList) {
   }
 }
 
+// Filter function to filter the array items by search query
 function liveSearchFilter(query) {
   return function(el) {
     let regex = new RegExp(query.toLowerCase(), 'g');
-    return regex.test(el.file.toLowerCase());
+    return regex.test(el.file.toLowerCase()) || regex.test(el.directory.toLowerCase());
   }
+}
+
+// In arrays like album sorted and folder sorted (those with nested objects), function to get the actual index of the songs from the list
+function getActualIndex(parentIndex, index, list){
+  let actualIndex = 0;
+  for(let i=0;i<list.length;i++){
+    if(i<parentIndex){
+      actualIndex += list[i].songs.length;
+    }else if(i===parentIndex){
+      actualIndex += index;
+      return actualIndex;
+    }else{
+      return actualIndex;
+    }
+  }
+  return actualIndex;
 }
