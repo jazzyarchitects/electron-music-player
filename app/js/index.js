@@ -27,7 +27,6 @@ app.controller('MainController', ($scope)=>{
 
   $scope.songs = [];
   $scope.folderSorted = [];
-  $scope.tempList = [];
   $scope.albumSorted = [];
   $scope.currentSongs = [];
   $scope.currentPlaylist = [];
@@ -36,6 +35,7 @@ app.controller('MainController', ($scope)=>{
     index: 0,
     imageURL: "img/footer_lodyas.png"
   };
+  $scope.temp = {};
   $scope.searchQuery = "";
   $scope.isPlaying = false;
   $scope.playListSize = 0;
@@ -57,6 +57,12 @@ app.controller('MainController', ($scope)=>{
 
   $scope.$watch('searchQuery', ()=>{
     $scope.currentSongs = $scope.songs.filter(liveSearchFilter($scope.searchQuery));
+    if($scope.searchQuery==="" && $scope.temp.currentView!==undefined){
+      $scope.changeView($scope.temp.currentView);
+    }else if($scope.searchQuery!==""){
+      if($scope.temp.currentView===undefined) $scope.temp.currentView = $scope.currentView;
+      $scope.changeView(ALL_VIEW, true);
+    }
   });
 
   /* Initial loading from the music directory */
@@ -100,6 +106,7 @@ app.controller('MainController', ($scope)=>{
       index = parentIndex;
       parentIndex = undefined;
     }
+    $scope.temp.currentView = undefined;
     if($scope.isPlaying && parentIndex===undefined && index===undefined) {
       $scope.pause();
       return;
@@ -314,11 +321,17 @@ app.controller('MainController', ($scope)=>{
   }
 
   // Selecting different views (Playlist, Album, All or Folders)
-  $scope.changeView = function(view){
+  $scope.changeView = function(view, preventReset){
+
+    if(preventReset!==true){
+      $scope.temp.currentView = undefined;
+    }
+
     // Prevent unnecessary functions if current button is pressed again
     if(view === $scope.currentView){
       return;
     }
+
     $scope.currentView = view;
     let parentList = $scope.currentSongs;
     switch(view){
