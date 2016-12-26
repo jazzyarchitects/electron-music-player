@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="MusicPlayer">
+<html ng-app="MusicPlayer" style="overflow:hidden">
 <head>
   <title>My Music Player</title>
   <link rel="stylesheet" href="../bower_components/angular-material/angular-material.min.css">
@@ -77,7 +77,15 @@
               </div>
             </a>
             <div class="song-item" flex="10">
-              <i class="fa fa-caret-down"></i>
+            <md-menu>
+                <i  ng-click="$mdOpenMenu($event)" md-menu-origin class="fa fa-caret-down"></i>
+             <md-menu-content md-menu-align-target>
+                <md-menu-item>
+                  <md-button ng-click="doSomething()">Do Something</md-button>
+                </md-menu-item>
+             </md-menu-content>
+            </md-menu>
+              <!-- <i class="fa fa-caret-down"></i> -->
             </div>
           </div>
         </div>

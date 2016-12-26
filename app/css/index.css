@@ -3,9 +3,23 @@
   src: url('Roboto-Regular.ttf');
 }
 
+html{
+  overflow: hidden;
+  overflow-y: hidden;
+  width: 800px;
+  height: 600px;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
 body{
   /*background: url('../img/background.jpeg');*/
-  width: 800px;
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 802px;
   height: 600px;
   margin: 0;
   padding: 0;
@@ -18,6 +32,7 @@ body{
   overflow: hidden;
   font-family: 'Roboto';
   border: 2px #fff solid;
+  overflow-y: hidden;
 }
 
 .fa{
@@ -39,6 +54,8 @@ button:focus, i:focus{
 
 .blackborder{
   position: fixed;
+  top: 1.5px;
+  left: 1.5px;
   width: 798px;
   height: 598px;
   border: 2px #000 solid;
@@ -190,6 +207,7 @@ input:focus{
   height: 480px;
   list-style: none;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 
