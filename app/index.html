@@ -70,21 +70,24 @@
 
         <!-- All Songs -->
         <div ng-if="currentView===2">
-        <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
+          <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
             <a  ng-click="play($index)" flex="90">
               <div class="song-item">
                 {{song.file | extentionFixer}}
               </div>
             </a>
             <div class="song-item" flex="10">
-            <md-menu>
+              <md-menu>
                 <i  ng-click="$mdOpenMenu($event)" md-menu-origin class="fa fa-caret-down"></i>
-             <md-menu-content md-menu-align-target>
-                <md-menu-item>
-                  <md-button ng-click="doSomething()">Do Something</md-button>
-                </md-menu-item>
-             </md-menu-content>
-            </md-menu>
+                <md-menu-content md-menu-align-target>
+                  <md-menu-item>
+                    <md-button ng-click="play($index)">Play</md-button>
+                  </md-menu-item>
+                  <md-menu-item>
+                    <md-button ng-click="doSomething()">Add to Playlist</md-button>
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
               <!-- <i class="fa fa-caret-down"></i> -->
             </div>
           </div>
@@ -97,13 +100,13 @@
               <i class="fa fa-folder"></i>&nbsp;&nbsp;<u>{{ folder.directory | directoryNameFixer}}</u>
             </div>
             <div  ng-class="{dataContent:true, activeContent:folder.expanded}">
-            <div ng-repeat="song in folder.songs" class="song-item-holder">
-              <a  ng-click="play($parent.$index, $index)">
-                <div class="song-item">
-                  {{song.song | extentionFixer}}
-                </div>
-              </a>
-            </div>
+              <div ng-repeat="song in folder.songs" class="song-item-holder">
+                <a  ng-click="play($parent.$index, $index)">
+                  <div class="song-item">
+                    {{song.song | extentionFixer}}
+                  </div>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -163,12 +166,19 @@
       <div layout="row" flex="100">
         <p>{{ currentSong.name | extentionFixer}}</p>
       </div>
-      <div layout="row" flex="100" class="volume-control-holder">
-        <i class="fa fa-volume-down" ng-click="decreaseVolume()"></i>
-        <md-slider-container>
-          <md-slider min="0" max="100" class="md-primary md-hue-4" ng-model="player.volume" step="5" type="range" name="volume-seekbar" id="volume-seekbar" ng-mouseup="changeVolume()"></md-slider>
-        </md-slider-container>
-        <i class="fa fa-volume-up" ng-click="increaseVolume()"></i>
+      <div layout="row" class="bottom-controls" flex="100">
+        <div class="currentPlaylist" flex="60" layout="row">
+          Next: {{ currentSong.next | extentionFixer }}
+        </div>
+        <div flex="40">
+        <div class="volume-control-holder" layout="row">
+          <i class="fa fa-volume-down" ng-click="decreaseVolume()"></i>
+          <md-slider-container>
+            <md-slider min="0" max="100" class="md-primary md-hue-4" ng-model="player.volume" step="5" type="range" name="volume-seekbar" id="volume-seekbar" ng-mouseup="changeVolume()"></md-slider>
+          </md-slider-container>
+          <i class="fa fa-volume-up" ng-click="increaseVolume()"></i>
+        </div>
+        </div>
       </div>
     </div>
   </div>

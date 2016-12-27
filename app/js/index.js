@@ -33,7 +33,8 @@ app.controller('MainController', ($scope)=>{
   $scope.currentSong = {
     name: "",
     index: 0,
-    imageURL: "img/footer_lodyas.png"
+    imageURL: "img/footer_lodyas.png",
+    next: ""
   };
   $scope.temp = {};
   $scope.searchQuery = "";
@@ -107,9 +108,8 @@ app.controller('MainController', ($scope)=>{
       parentIndex = undefined;
     }
     $scope.temp.currentView = undefined;
-    if($scope.isPlaying && parentIndex===undefined && index===undefined) {
+    if($scope.isPlaying) {
       $scope.pause();
-      return;
     }
     let songPath = undefined;
 
@@ -118,6 +118,7 @@ app.controller('MainController', ($scope)=>{
     if(index!==undefined && parentIndex===undefined) {
       audio = null;
       $scope.currentSong.index = index;
+      console.log($scope.currentPlaylist);
       $scope.currentSong.name = $scope.currentPlaylist[index].file || $scope.currentPlaylist[index].song;
       $scope.currentSong.directory = $scope.currentPlaylist[index].directory;
       songPath = "file://"+$scope.currentPlaylist[index].directory + '/' + $scope.currentSong.name;
@@ -185,6 +186,16 @@ app.controller('MainController', ($scope)=>{
           }
         }, 2000);
       });
+    }
+
+    if($scope.player.shuffle.toLowerCase()==="off"){
+      $scope.currentSong.next = $scope.currentPlaylist[getNextIndex($scope.currentSong.index, $scope.playListSize)].file;
+    }else{
+      $scope.currentSong.next = "Surprise Surprise :)";
+    }
+
+    if($scope.player.repeat.toLowerCase()==="current"){
+      $scope.currentSong.next = $scope.currentSong.name;
     }
 
     if(audio!==null) {

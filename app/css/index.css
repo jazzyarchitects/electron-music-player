@@ -413,11 +413,12 @@ md-slider-container{
   background: rgba(0,0,0,0.5);
 }
 
+.bottom-control{
+
+}
+
 .volume-control-holder{
-  position: absolute;
-  left: 62%;
   padding: 2px 10px 0px 5px;
-  top: 108px;
   height: 65px;
 }
 
