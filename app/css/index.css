@@ -250,6 +250,12 @@ input:focus{
   font-size: 14px;
 }
 
+.song-item:hover{
+  transform: scale(1.1,1.1);
+  margin-left: 15px;
+  transition-duration: 250ms;
+}
+
 .md-accordion .directory-item .dataContent{
   margin-bottom: 0px;
 }
@@ -288,7 +294,7 @@ input:focus{
 }
 
 .directory-item-holder .song-item{
-padding-left: 15px;
+  padding-left: 15px;
 }
 
 .directory-item-holder .song-item-holder:hover{
@@ -316,8 +322,6 @@ padding-left: 15px;
 .thumbnail-img{
   width: 180px;
   height: 180px;
-  /*object-fit: none;/**/
-  /*object-position: left;*/
 }
 
 .player-controls{
@@ -352,10 +356,6 @@ padding-left: 15px;
   width: 30px;
   text-align: center;
 }
-
-/*.control:nth-child(1) a, .control:nth-child(5) a{
-  display: block;
-}*/
 
 .control:nth-child(1) p, .control:nth-child(5) p{
   font-size: 8px;
@@ -469,7 +469,7 @@ md-slider-container{
 
 md-dialog{
   border: none;
-  height: 300px;
+  height: 360px;
   background: #18226A;
   padding-bottom: 10px;
 }
@@ -480,4 +480,37 @@ md-dialog{
 
 .dialog-content .music-list{
   height: 232px;
+}
+
+md-dialog-actions{
+  color: #fff;
+}
+
+md-dialog-actions span{
+  font-size: 12px;
+}
+
+md-dialog-actions md-button{
+  font-size: 14px;
+}
+
+md-dialog-content .song-item .fa{
+  font-size: 12px;
+  color: #aaaaaa;
+}
+
+md-dialog-content .song-item .fa:hover{
+  transform: scale(1.3,1.3);
+  color: #fff;
+  transition-duration: 250ms;
+}
+
+md-dialog-content .song-item:hover{
+  transform: scale(1.1,1.1);
+  margin-left: 25px;
+  transition-duration: 250ms;
+}
+
+md-dialog-content .music-list, md-dialog-content .song-item{
+  list-style-type: square;
 }

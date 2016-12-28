@@ -14,12 +14,27 @@
         <div ng-repeat="song in songs" class="song-item-holder" layout="row">
           <a  ng-click="play($index)" flex="90">
             <div class="song-item">
-              {{song.file | extentionFixer}}
+              <i class="fa fa-play" style="color: #fff;" ng-if="currentSong.index===$index">&nbsp;&nbsp;</i>{{song.song | extentionFixer}}
             </div>
           </a>
+          <div class="song-item" flex="10" ng-click="delete($index)">
+            <i class="fa fa-close"></i>
+            </div>
         </div>
         </div>
       </div>
     </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <span>{{ songs.length }}&nbsp; songs in this playlist</span>
+      <span flex></span>
+      <md-button ng-click="">
+       Save List
+      </md-button>
+      <md-button ng-click="">
+        Clear
+      </md-button>
+    </md-dialog-actions>
+
   </form>
 </md-dialog>

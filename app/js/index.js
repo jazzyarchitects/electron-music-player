@@ -72,7 +72,7 @@ app.controller('MainController', ($scope, $mdDialog)=>{
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
     $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
     if($scope.currentSong.next===""){
-      $scope.currentSong.next = $scope.currentSongs[0].file;
+      $scope.currentSong.next = $scope.currentSongs[0].song;
     }
     $scope.playListSize = $scope.currentPlaylist.length;
     /*
@@ -122,26 +122,26 @@ app.controller('MainController', ($scope, $mdDialog)=>{
       audio = null;
       $scope.currentSong.index = index;
       // console.log($scope.currentPlaylist);
-      $scope.currentSong.name = $scope.currentPlaylist[index].file || $scope.currentPlaylist[index].song;
+      $scope.currentSong.name = $scope.currentPlaylist[index].song;
       $scope.currentSong.directory = $scope.currentPlaylist[index].directory;
       songPath = "file://"+$scope.currentPlaylist[index].directory + '/' + $scope.currentSong.name;
     }else if(index!==undefined && parentIndex!==undefined){
       switch($scope.currentView){
         case ALBUM_VIEW:
-          $scope.play(getActualIndex(parentIndex, index, $scope.albumSorted));
+        $scope.play(getActualIndex(parentIndex, index, $scope.albumSorted));
         break;
         case FOLDER_VIEW:
-          $scope.play(getActualIndex(parentIndex, index, $scope.folderSorted));
+        $scope.play(getActualIndex(parentIndex, index, $scope.folderSorted));
         break;
         default:
         break;
       }
     }else{
       if(audio===null) {
-        $scope.currentSong.name = $scope.currentPlaylist[0].file;
+        $scope.currentSong.name = $scope.currentPlaylist[0].song;
         $scope.currentSong.index = 0;
         $scope.currentSong.directory = $scope.currentPlaylist[0].directory;
-        songPath = "file://"+$scope.currentPlaylist[0].directory + '/' + $scope.currentPlaylist[0].file;
+        songPath = "file://"+$scope.currentPlaylist[0].directory + '/' + $scope.currentPlaylist[0].song;
       }
     }
 
@@ -192,7 +192,7 @@ app.controller('MainController', ($scope, $mdDialog)=>{
     }
 
     if($scope.player.shuffle.toLowerCase()==="off"){
-      $scope.currentSong.next = $scope.currentPlaylist[getNextIndex($scope.currentSong.index, $scope.playListSize)].file;
+      $scope.currentSong.next = $scope.currentPlaylist[getNextIndex($scope.currentSong.index, $scope.playListSize)].song;
     }else{
       $scope.currentSong.next = "Surprise Surprise :)";
     }
@@ -357,10 +357,16 @@ app.controller('MainController', ($scope, $mdDialog)=>{
         $scope.cancel= ()=>{
           $mdDialog.cancel()
         };
+        $scope.currentSong = parent.currentSong;
         $scope.songs = parent.currentPlaylist;
         $scope.play = function(index){
           parent.play(index);
-        }
+        };
+        $scope.delete = function(index){
+          console.log("Deleting");
+          $scope.songs.splice(index, 1);
+          $scope.currentSong.next = $scope.songs[getNextIndex($scope.currentSong.index, $scope.songs.length)].song;
+        };
       },
       targetEvent: $event,
       controllerAs: 'Player',
@@ -403,7 +409,7 @@ function getRandomIndexNotIn(arrayLength, usedList) {
 function liveSearchFilter(query) {
   return function(el) {
     let regex = new RegExp(query.toLowerCase(), 'g');
-    return regex.test(el.file.toLowerCase()) || regex.test(el.directory.toLowerCase());
+    return regex.test(el.song.toLowerCase()) || regex.test(el.directory.toLowerCase());
   }
 }
 

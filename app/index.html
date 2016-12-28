@@ -170,7 +170,7 @@
       </div>
       <div layout="row" class="bottom-controls" flex="100">
         <div class="current-playlist" flex="60" layout="row" ng-click="showCurrentPlayist($event)">
-          <span  ng-if="player.repeat!=='Current' && player.shuffle!=='On'"><b><u>Next:</u></b>&nbsp;&nbsp;{{ currentSong.next | extentionFixer }}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down rotate-180"></i></span>
+          <span ng-if="player.repeat!=='Current' && player.shuffle!=='On' && currentSong.next!==''"><b><u>Next:</u></b>&nbsp;&nbsp;{{ currentSong.next | extentionFixer }}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down rotate-180"></i></span>
         </div>
         <div flex="40">
         <div class="volume-control-holder" layout="row">
