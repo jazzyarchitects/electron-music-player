@@ -73,7 +73,7 @@
           <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
             <a  ng-click="play($index)" flex="90">
               <div class="song-item">
-                {{song.file | extentionFixer}}
+                {{song.song | extentionFixer}}
               </div>
             </a>
             <div class="song-item" flex="10">
@@ -164,11 +164,13 @@
         </md-slider-container>
       </div>
       <div layout="row" flex="100">
-        <p>{{ currentSong.name | extentionFixer}}</p>
+        <p ng-if="currentSong.name.length<45">{{ currentSong.name | extentionFixer}}</p>
+        <!-- TODO: Marquee deprecated. Change this whenever possible -->
+        <marquee ng-if="currentSong.name.length>=45" scrollamount=5 style="width: 60%; margin-left: 20%;">{{ currentSong.name | extentionFixer}}</marquee>
       </div>
       <div layout="row" class="bottom-controls" flex="100">
-        <div class="currentPlaylist" flex="60" layout="row">
-          Next: {{ currentSong.next | extentionFixer }}
+        <div class="current-playlist" flex="60" layout="row" ng-click="showCurrentPlayist($event)">
+          <span  ng-if="player.repeat!=='Current' && player.shuffle!=='On'"><b><u>Next:</u></b>&nbsp;&nbsp;{{ currentSong.next | extentionFixer }}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down rotate-180"></i></span>
         </div>
         <div flex="40">
         <div class="volume-control-holder" layout="row">

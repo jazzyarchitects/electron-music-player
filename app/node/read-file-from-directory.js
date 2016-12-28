@@ -14,7 +14,7 @@ module.exports = function(directory) {
   if(typeof(directory)==="string"){
     fs.readdirSync(MUSIC_LIB).forEach((fileName)=>{
       if(/(.*)\.(mp3)$/.test(fileName))
-        files.push({directory: directory, file: fileName});
+        files.push({directory: directory, song: fileName});
     });
   }else{
     directory.forEach((d)=>{
@@ -39,7 +39,7 @@ function readDir(dirname){
       files = files.concat(readDir(filePath));
     }else{
       if(/(.*)\.(mp3)$/.test(file)){
-        files.push({directory: dirname, file: file});
+        files.push({directory: dirname, song: file});
       }
     }
   });

@@ -1,0 +1,25 @@
+<md-dialog aria-label="Currently Playing" flex="60">
+  <form ng-cloak>
+    <md-toolbar class="md-hue-2">
+      <div class="md-toolbar-tools">
+        <h2>Playing</h2>
+        <span flex></span>
+        <i class="fa fa-close" ng-click="cancel()"></i>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content style="overflow: hidden;">
+      <div class="music-list-holder dialog-content">
+      <div class="music-list">
+        <div ng-repeat="song in songs" class="song-item-holder" layout="row">
+          <a  ng-click="play($index)" flex="90">
+            <div class="song-item">
+              {{song.file | extentionFixer}}
+            </div>
+          </a>
+        </div>
+        </div>
+      </div>
+    </md-dialog-content>
+  </form>
+</md-dialog>

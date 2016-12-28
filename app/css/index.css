@@ -150,6 +150,7 @@ md-toolbar .fa{
 
 .main{
   height: 552px;
+  overflow: hidden;
 }
 
 input:focus{
@@ -401,9 +402,14 @@ md-slider-container{
   cursor: pointer;
 }
 
-.player-options p{
+.player-options p, .player-options marquee{
+  /*border: 1px solid #f00;*/
   display: block;
   width: 100%;
+  font-size: 16px;
+  margin: 8px 6px;
+  line-height: 20px;
+  min-height: 20px;
   text-align: center;
 }
 
@@ -411,6 +417,26 @@ md-slider-container{
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.5);
+}
+
+.current-playlist{
+  margin: auto;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.current-playlist:hover{
+  background: rgba(0,0,0,0.5);
+  transition-duration: 250ms;
+}
+
+.current-playlist:focus{
+  outline: none;
+}
+
+.current-playlist .fa{
+  line-height: initial;
 }
 
 .bottom-control{
@@ -431,4 +457,27 @@ md-slider-container{
 
 .md-hue-green{
   color: #2E7D32;
+}
+
+.rotate-180{
+  transform: rotate(180deg);
+}
+
+.md-dialog-content{
+  background: rgba(0,0,0,0.5);
+}
+
+md-dialog{
+  border: none;
+  height: 300px;
+  background: #18226A;
+  padding-bottom: 10px;
+}
+
+.dialog-content{
+  padding: 10px;
+}
+
+.dialog-content .music-list{
+  height: 232px;
 }

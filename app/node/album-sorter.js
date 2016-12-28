@@ -6,13 +6,13 @@ const path = require('path');
 const fs = require('fs');
 
 let albumRetreiver = function(song){
-  let songPath = path.join(song.directory, song.file);
+  let songPath = path.join(song.directory, song.song);
   return new Promise((resolve)=>{
     fs.readFile(songPath, (err, buf)=>{
       if(err) console.log("ID3-PARSER Error: album-sorter.js: "+JSON.stringify(err));
       id3.parse(buf)
       .then((tag)=>{
-        resolve({directory: song.directory, file: song.file, album: tag.album});
+        resolve({directory: song.directory, song: song.song, album: tag.album});
       });
     });
   });
@@ -42,7 +42,7 @@ let sort = function(albumData){
       albums.push(obj.album);
       albumSongs[obj.album] = [];
     }
-    albumSongs[obj.album].push({directory: obj.directory, song: obj.file});
+    albumSongs[obj.album].push({directory: obj.directory, song: obj.song});
   }
 
   let a = [];

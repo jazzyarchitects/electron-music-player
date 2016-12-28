@@ -20,7 +20,7 @@ const ALBUM_VIEW = 1;
 const ALL_VIEW = 2;
 const FOLDER_VIEW = 3;
 
-app.controller('MainController', ($scope)=>{
+app.controller('MainController', ($scope, $mdDialog)=>{
 
   /* Basic environment setup */
   $scope.currentView = 2;
@@ -70,7 +70,10 @@ app.controller('MainController', ($scope)=>{
   $scope.init = ()=>{
     $scope.songs = readFileFromDirectory();
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
-    $scope.currentPlaylist = $scope.currentSongs;
+    $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
+    if($scope.currentSong.next===""){
+      $scope.currentSong.next = $scope.currentSongs[0].file;
+    }
     $scope.playListSize = $scope.currentPlaylist.length;
     /*
     *  Sorting songs according to album and folder in different threads so that main thread in not blocked
@@ -118,7 +121,7 @@ app.controller('MainController', ($scope)=>{
     if(index!==undefined && parentIndex===undefined) {
       audio = null;
       $scope.currentSong.index = index;
-      console.log($scope.currentPlaylist);
+      // console.log($scope.currentPlaylist);
       $scope.currentSong.name = $scope.currentPlaylist[index].file || $scope.currentPlaylist[index].song;
       $scope.currentSong.directory = $scope.currentPlaylist[index].directory;
       songPath = "file://"+$scope.currentPlaylist[index].directory + '/' + $scope.currentSong.name;
@@ -334,7 +337,7 @@ app.controller('MainController', ($scope)=>{
       parentList = $scope.folderSorted;
       break;
       case ALL_VIEW:
-      $scope.currentPlaylist = $scope.currentSongs;
+      $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
       default:
       return;
     }
@@ -346,6 +349,25 @@ app.controller('MainController', ($scope)=>{
     }
     // console.log($scope.currentPlaylist);
   }
+
+  let parent = $scope;
+  $scope.showCurrentPlayist = function($event){
+    $mdDialog.show({
+      controller: ($scope, $mdDialog)=> {
+        $scope.cancel= ()=>{
+          $mdDialog.cancel()
+        };
+        $scope.songs = parent.currentPlaylist;
+        $scope.play = function(index){
+          parent.play(index);
+        }
+      },
+      targetEvent: $event,
+      controllerAs: 'Player',
+      templateUrl: 'pages/playlist.html',
+      clickOutsideToClose: true
+    });
+  };
 
   assignInterfacer($scope);
 });
