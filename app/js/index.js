@@ -20,7 +20,7 @@ const ALBUM_VIEW = 1;
 const ALL_VIEW = 2;
 const FOLDER_VIEW = 3;
 
-app.controller('MainController', ($scope, $mdDialog)=>{
+app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
 
   /* Basic environment setup */
   $scope.currentView = 2;
@@ -215,12 +215,20 @@ app.controller('MainController', ($scope, $mdDialog)=>{
     if(audio!==null) audio.pause();
     if(stop===true) {
       audio = null;
-      $scope.$apply(()=>{
+      // First check is already in digest cycle before $apply
+      if(!$scope.$$phase){
+        $scope.$apply(()=>{
+          $scope.player.currentTime = 0;
+          $scope.player.duration = 0;
+          $scope.player.endTime = 0;
+          $scope.currentSong.name = "";
+        });
+      }else{
         $scope.player.currentTime = 0;
         $scope.player.duration = 0;
         $scope.player.endTime = 0;
         $scope.currentSong.name = "";
-      });
+      }
     }
     $scope.isPlaying = false;
   }
@@ -353,17 +361,32 @@ app.controller('MainController', ($scope, $mdDialog)=>{
   let parent = $scope;
   $scope.showCurrentPlayist = function($event){
     $mdDialog.show({
-      controller: ($scope, $mdDialog)=> {
+      controller: ($scope, $mdDialog, $rootScope)=> {
         $scope.cancel= ()=>{
           $mdDialog.cancel()
         };
         $scope.currentSong = parent.currentSong;
         $scope.songs = parent.currentPlaylist;
+        $scope.$watch('playing', ()=>{
+          console.log("Dialog: "+$scope.playing);
+        });
+        $scope.playing = parent.isPlaying;
         $scope.play = function(index){
+          if($scope.playing){
+            return $scope.pause();
+          }
           parent.play(index);
+          $scope.playing = parent.isPlaying;
+          $scope.currentSong = parent.currentSong;
         };
+        $scope.pause = function(stop){
+          parent.pause(stop);
+          $scope.playing = parent.isPlaying;
+        }
         $scope.delete = function(index){
-          console.log("Deleting");
+          if(index===$scope.currentSong.index){
+            $scope.pause(true);
+          }
           $scope.songs.splice(index, 1);
           $scope.currentSong.next = $scope.songs[getNextIndex($scope.currentSong.index, $scope.songs.length)].song;
         };
@@ -374,7 +397,6 @@ app.controller('MainController', ($scope, $mdDialog)=>{
       clickOutsideToClose: true
     });
   };
-
   assignInterfacer($scope);
 });
 

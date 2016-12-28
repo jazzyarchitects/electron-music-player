@@ -175,7 +175,7 @@ input:focus{
 
 .playlist-buttons-div{
   height: 30px;
-  width: 100%;
+  width: 99%;
 }
 
 .playlist-button button{
@@ -193,9 +193,23 @@ input:focus{
   line-height: initial;
 }
 
+.playlist-button button:hover{
+  background: rgba(255,255,255,0.2);
+  transition-duration: 250ms;
+}
+
 .playlist-button .fa:hover{
   color: #fff;
+}
+
+.playlist-active button{
+  background: rgba(255,255,255,0.1);
+  transition-duration: 150ms;
+}
+
+.playlist-active .fa{
   transform: scale(1.2,1.2);
+  color: #fff;
 }
 
 .music-list-holder{

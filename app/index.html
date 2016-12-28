@@ -34,16 +34,16 @@
       <center><input type="text" ng-model="searchQuery" placeholder="&#9906; Search" id="searchQuery" /></center>
 
       <div layout="row" flex="100" class="playlist-buttons-div">
-        <div class="playlist-button" flex="25">
+        <div class="playlist-button" flex="25" ng-class="{'playlist-active': currentView===0}">
           <button ng-click="changeView(0)" title="Playlist"><i class="fa fa-list-alt"></i></button>
         </div>
-        <div class="playlist-button" flex="25">
+        <div class="playlist-button" flex="25" ng-class="{'playlist-active': currentView===1}">
           <button ng-click="changeView(1)" title="Albums"><i class="fa fa-th-large"></i></button>
         </div>
-        <div class="playlist-button" flex="25">
+        <div class="playlist-button" flex="25" ng-class="{'playlist-active': currentView===2}">
           <button ng-click="changeView(2)" title="All Songs"><i class="fa fa-list-ul"></i></button>
         </div>
-        <div class="playlist-button" flex="25">
+        <div class="playlist-button" flex="25" ng-class="{'playlist-active': currentView===3}">
           <button ng-click="changeView(3)" title="Folders"><i class="fa fa-folder"></i></button>
         </div>
       </div>
