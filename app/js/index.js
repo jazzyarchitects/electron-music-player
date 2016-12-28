@@ -23,7 +23,7 @@ const FOLDER_VIEW = 3;
 app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
 
   /* Basic environment setup */
-  $scope.currentView = 2;
+  $scope.currentView = 1;
 
   $scope.songs = [];
   $scope.folderSorted = [];
@@ -52,7 +52,7 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
   };
 
   // Watching currentSongs list (changes with search Query) to change playListSize required in next() and prev() functions
-  $scope.$watch('currentSongs', ()=>{
+  $scope.$watch('currentPlaylist', ()=>{
     $scope.playListSize = $scope.currentSongs.length;
   });
 
@@ -119,6 +119,9 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
     // If index undefined i.e. Directly clicking play button without selecting song, then play first song else play selected song
     // For All songs list
     if(index!==undefined && parentIndex===undefined) {
+      if(audio!==null){
+        audio.pause();
+      }
       audio = null;
       $scope.currentSong.index = index;
       // console.log($scope.currentPlaylist);
@@ -128,11 +131,20 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
     }else if(index!==undefined && parentIndex!==undefined){
       switch($scope.currentView){
         case ALBUM_VIEW:
-        $scope.play(getActualIndex(parentIndex, index, $scope.albumSorted));
+        $scope.currentPlaylist = $scope.albumSorted[parentIndex].songs;
+        $scope.playListSize = $scope.albumSorted[parentIndex].songs.length;
+        return $scope.play(index);
+        // $scope.play(getActualIndex(parentIndex, index, $scope.albumSorted));
         break;
         case FOLDER_VIEW:
-        $scope.play(getActualIndex(parentIndex, index, $scope.folderSorted));
+        $scope.currentPlaylist = $scope.folderSorted[parentIndex].songs;
+        $scope.playListSize = $scope.folderSorted[parentIndex].songs.length;
+        return$scope.play(index);
+        // $scope.play(getActualIndex(parentIndex, index, $scope.folderSorted));
         break;
+        case ALL_VIEW:
+        $scope.currentPlaylist = $scope.currentSongs;
+        $scope.play(index);
         default:
         break;
       }
@@ -192,7 +204,18 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
     }
 
     if($scope.player.shuffle.toLowerCase()==="off"){
-      $scope.currentSong.next = $scope.currentPlaylist[getNextIndex($scope.currentSong.index, $scope.playListSize)].song;
+      let i = getNextIndex($scope.currentSong.index, $scope.playListSize);
+      // console.log($scope.currentSong);
+      // console.log($scope.playListSize);
+      // console.log(i);
+      // console.log($scope.currentPlaylist);
+      // console.log($scope.currentPlaylist[i]);
+      if(i>=0){
+        $scope.currentSong.next = $scope.currentPlaylist[i].song;
+      }else{
+        $scope.currentSong.next = $scope.currentSong.name;
+      }
+
     }else{
       $scope.currentSong.next = "Surprise Surprise :)";
     }
@@ -367,21 +390,18 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
         };
         $scope.currentSong = parent.currentSong;
         $scope.songs = parent.currentPlaylist;
-        $scope.$watch('playing', ()=>{
-          console.log("Dialog: "+$scope.playing);
-        });
         $scope.playing = parent.isPlaying;
         $scope.play = function(index){
-          if($scope.playing){
-            return $scope.pause();
+          if(parent.isPlaying){
+            $scope.pause();
           }
           parent.play(index);
-          $scope.playing = parent.isPlaying;
+          $scope.playing = true;
           $scope.currentSong = parent.currentSong;
         };
         $scope.pause = function(stop){
           parent.pause(stop);
-          $scope.playing = parent.isPlaying;
+          $scope.playing = false;
         }
         $scope.delete = function(index){
           if(index===$scope.currentSong.index){
