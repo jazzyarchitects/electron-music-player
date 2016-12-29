@@ -25,7 +25,7 @@
     </div>
       <div class="music-list-holder dialog-content">
       <div class="music-list">
-        <div ng-repeat="song in songs" class="song-item-holder" layout="row">
+        <div ng-repeat="song in songs track by $index" class="song-item-holder" layout="row">
           <a  ng-click="play($index)" flex="90">
             <div class="song-item">
               <i class="fa" ng-class="playing ? 'fa-play' : 'fa-pause'" style="color: #fff;" ng-if="currentSong.index===$index">&nbsp;&nbsp;</i>{{song.song | extentionFixer}}

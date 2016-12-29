@@ -20,7 +20,7 @@ const ALBUM_VIEW = 1;
 const ALL_VIEW = 2;
 const FOLDER_VIEW = 3;
 
-app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
+app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
 
   /* Basic environment setup */
   $scope.currentView = 1;
@@ -52,9 +52,11 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
   };
 
   // Watching currentSongs list (changes with search Query) to change playListSize required in next() and prev() functions
-  $scope.$watch('currentPlaylist', ()=>{
-    $scope.playListSize = $scope.currentSongs.length;
-  });
+  // Causing trouble as this is being called after other functions are done using the old values :(
+  // $scope.$watch('currentPlaylist', ()=>{
+  //   $scope.playListSize = $scope.currentPlaylist.length;
+  //   console.log("Updated playlist size: "+$scope.playListSize);
+  // }, true);
 
   $scope.$watch('searchQuery', ()=>{
     $scope.currentSongs = $scope.songs.filter(liveSearchFilter($scope.searchQuery));
@@ -106,6 +108,7 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
 
   /* Function to play a selected audio file, or the previously paused*/
   $scope.play = function(parentIndex, index) {
+    console.log("Playing: Current playList Size: "+$scope.currentPlaylist.length);
     if(index===undefined){
       index = parentIndex;
       parentIndex = undefined;
@@ -132,16 +135,16 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
       switch($scope.currentView){
         case ALBUM_VIEW:
           $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.albumSorted[parentIndex].songs));
-          $scope.playListSize = $scope.albumSorted[parentIndex].songs.length;
+          // $scope.playListSize = $scope.albumSorted[parentIndex].songs.length;
           break;
         case FOLDER_VIEW:
           $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.folderSorted[parentIndex].songs));
-          $scope.playListSize = $scope.folderSorted[parentIndex].songs.length;
+          // $scope.playListSize = $scope.folderSorted[parentIndex].songs.length;
           break;
         case ALL_VIEW:
           if($scope.searchQuery==="" || $scope.searchQuery==='' || $scope.searchQuery===undefined || $scope.searchQuery===null){
             $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
-            $scope.playListSize = $scope.currentPlaylist.length;
+            // $scope.playListSize = $scope.currentPlaylist.length;
             break;
           }else{
             $scope.currentPlaylist = [];
@@ -214,11 +217,11 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
     }
 
     if($scope.player.shuffle.toLowerCase()==="off"){
+      $scope.playListSize = $scope.currentPlaylist.length;
       let i = getNextIndex($scope.currentSong.index, $scope.playListSize);
-      // console.log($scope.currentSong);
-      // console.log($scope.playListSize);
-      // console.log(i);
-      // console.log($scope.currentPlaylist);
+      // console.log("Playlist size: "+$scope.playListSize);
+      // console.log("i: "+i);
+      // console.log("Playlist: "+JSON.stringify($scope.currentPlaylist));
       // console.log($scope.currentPlaylist[i]);
       if(i>=0){
         $scope.currentSong.next = $scope.currentPlaylist[i].song;
@@ -358,43 +361,41 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
 
   // Selecting different views (Playlist, Album, All or Folders)
   $scope.changeView = function(view, preventReset){
-
     if(preventReset!==true){
       $scope.temp.currentView = undefined;
     }
-
     // Prevent unnecessary functions if current button is pressed again
     if(view === $scope.currentView){
       return;
     }
-
     $scope.currentView = view;
-    let parentList = $scope.currentSongs;
-    switch(view){
-      case ALBUM_VIEW:
-      parentList = $scope.albumSorted;
-      break;
-      case FOLDER_VIEW:
-      parentList = $scope.folderSorted;
-      break;
-      case ALL_VIEW:
-      $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
-      default:
-      return;
-    }
-    $scope.currentPlaylist = [];
-    for(let i=0;i<parentList.length;i++){
-      for(let j=0;j<parentList[i].songs.length;j++){
-        $scope.currentPlaylist.push(parentList[i].songs[j]);
-      }
-    }
-    // console.log($scope.currentPlaylist);
   }
+
+  $scope.addToCurrentPlaylist = function(parentIndex, index){
+    if(parentIndex!==undefined && index===undefined){
+      index = parentIndex;
+      parentIndex = undefined;
+    }
+    switch($scope.currentView){
+      case ALBUM_VIEW:
+        $scope.currentPlaylist.push($scope.albumSorted[parentIndex].songs[index]);
+        break;
+      case ALL_VIEW:
+        $scope.currentPlaylist.push($scope.currentSongs[index]);
+        break;
+      case FOLDER_VIEW:
+        $scope.currentPlaylist.push($scope.folderSorted[parentIndex].songs[index]);
+        break;
+      default:
+        break;
+    }
+    return;
+  };
 
   let parent = $scope;
   $scope.showCurrentPlayist = function($event){
     $mdDialog.show({
-      controller: ($scope, $mdDialog, $rootScope)=> {
+      controller: ($scope, $mdDialog)=> {
         $scope.cancel= ()=>{
           $mdDialog.cancel()
         };
@@ -417,16 +418,16 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
         };
 
         $scope.delete = function(index){
-          $scope.songs.splice(index, 1);
           if(index===$scope.currentSong.index){
             $scope.pause(true);
           }
+          $scope.songs.splice(index, 1);
           if(index<$scope.currentSong.index){
             parent.currentSong.index--;
           }
           $scope.currentSong = parent.currentSong;
-          $scope.currentSong.next = $scope.songs[getNextIndex($scope.currentSong.index, $scope.songs.length)].song;
           parent.playListSize = $scope.songs.length;
+          $scope.currentSong.next = $scope.songs[getNextIndex($scope.currentSong.index, $scope.songs.length)].song;
         };
 
         $scope.reload = function(){

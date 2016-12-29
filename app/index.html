@@ -76,20 +76,20 @@
                 {{song.song | extentionFixer}}
               </div>
             </a>
-            <div class="song-item" flex="10">
-              <md-menu>
-                <i  ng-click="$mdOpenMenu($event)" md-menu-origin class="fa fa-caret-down"></i>
+            <md-menu flex="10"  >
+                <div class="menu-button" ng-click="$mdOpenMenu($event)">
+                  <i md-menu-origin class="fa fa-caret-down"></i>
+                </div>
                 <md-menu-content md-menu-align-target>
                   <md-menu-item>
                     <md-button ng-click="play(0, $index)">Play</md-button>
                   </md-menu-item>
                   <md-menu-item>
-                    <md-button ng-click="doSomething()">Add to Playlist</md-button>
+                    <md-button ng-click="addToCurrentPlaylist($index)">Add to Playlist</md-button>
                   </md-menu-item>
                 </md-menu-content>
-              </md-menu>
               <!-- <i class="fa fa-caret-down"></i> -->
-            </div>
+            </md-menu>
           </div>
         </div>
 

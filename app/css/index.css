@@ -256,7 +256,7 @@ input:focus{
 
 }*/
 
-.song-item{
+.song-item, .menu-button{
   padding: 5px;
   color: #eeeeee;
   transition-duration: 500ms;
@@ -493,7 +493,7 @@ md-dialog{
 }
 
 .dialog-content .music-list{
-  height: 232px;
+  height: 206px;
 }
 
 md-dialog-actions{
