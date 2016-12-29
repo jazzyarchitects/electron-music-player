@@ -528,3 +528,28 @@ md-dialog-content .song-item:hover{
 md-dialog-content .music-list, md-dialog-content .song-item{
   list-style-type: square;
 }
+
+/* For playlist dialog content */
+md-dialog .control:nth-child(1){
+  text-align: right;
+}
+md-dialog .control:nth-child(2){
+  text-align: center;
+}
+md-dialog .control:nth-child(3){
+  text-align: left;
+}
+
+md-dialog .player-controls{
+  height: 35px;
+}
+
+md-dialog .player-controls .fa-fast-backward, md-dialog .player-controls .fa-fast-forward{
+  font-size: 14px;
+  line-height: 34px;
+}
+
+md-dialog .fa-play-circle, md-dialog .fa-pause-circle{
+  font-size: 35px;
+  line-height: 34px;
+}

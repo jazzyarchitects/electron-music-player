@@ -9,6 +9,20 @@
     </md-toolbar>
 
     <md-dialog-content style="overflow: hidden;">
+    <div class="player-controls" layout="row">
+      <div class="control" flex="33">
+        <a href="#" ng-click="prev()"><i class="fa fa-fast-backward" aria-hidden="true"></i></a>
+      </div>
+      <div class="control" flex="33">
+        <a ng-click="togglePlay()">
+          <i class="fa" ng-class="!playing? 'fa-play-circle' : 'fa-pause-circle'" aria-hidden="true">
+          </i>
+        </a>
+      </div>
+      <div class="control" flex="33">
+        <a ng-click="next()"><i class="fa fa-fast-forward" aria-hidden="true"></i></a>
+      </div>
+    </div>
       <div class="music-list-holder dialog-content">
       <div class="music-list">
         <div ng-repeat="song in songs" class="song-item-holder" layout="row">

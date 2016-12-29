@@ -401,6 +401,7 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
         $scope.currentSong = parent.currentSong;
         $scope.songs = parent.currentPlaylist;
         $scope.playing = parent.isPlaying;
+
         $scope.play = function(index){
           if(parent.isPlaying){
             $scope.pause();
@@ -409,10 +410,12 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
           $scope.playing = true;
           $scope.currentSong = parent.currentSong;
         };
+
         $scope.pause = function(stop){
           parent.pause(stop);
           $scope.playing = false;
-        }
+        };
+
         $scope.delete = function(index){
           $scope.songs.splice(index, 1);
           if(index===$scope.currentSong.index){
@@ -425,6 +428,27 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
           $scope.currentSong.next = $scope.songs[getNextIndex($scope.currentSong.index, $scope.songs.length)].song;
           parent.playListSize = $scope.songs.length;
         };
+
+        $scope.reload = function(){
+          $scope.currentSong = parent.currentSong;
+          $scope.playing = parent.isPlaying;
+        }
+
+        $scope.next = function(){
+          parent.next();
+          $scope.reload();
+        };
+
+        $scope.prev = function(){
+          parent.prev();
+          $scope.reload();
+        };
+
+        $scope.togglePlay = function(){
+          parent.togglePlay();
+          $scope.reload();
+        }
+
       },
       targetEvent: $event,
       controllerAs: 'Player',
