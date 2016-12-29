@@ -71,7 +71,7 @@
         <!-- All Songs -->
         <div ng-if="currentView===2">
           <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
-            <a  ng-click="play($index)" flex="90">
+            <a  ng-click="play(0,$index)" flex="90">
               <div class="song-item">
                 {{song.song | extentionFixer}}
               </div>

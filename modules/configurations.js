@@ -20,5 +20,6 @@ let getValue = function(key){
 
 module.exports = {
   save: saveValue,
-  get: getValue
+  get: getValue,
+  getUserFolder: getUserFolder
 }

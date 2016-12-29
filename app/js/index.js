@@ -133,17 +133,27 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
         case ALBUM_VIEW:
           $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.albumSorted[parentIndex].songs));
           $scope.playListSize = $scope.albumSorted[parentIndex].songs.length;
-          return $scope.play(index);
+          break;
         case FOLDER_VIEW:
           $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.folderSorted[parentIndex].songs));
           $scope.playListSize = $scope.folderSorted[parentIndex].songs.length;
-          return$scope.play(index);
+          break;
         case ALL_VIEW:
-          $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
-          $scope.play(index);
+          if($scope.searchQuery==="" || $scope.searchQuery==='' || $scope.searchQuery===undefined || $scope.searchQuery===null){
+            $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
+            $scope.playListSize = $scope.currentPlaylist.length;
+            break;
+          }else{
+            $scope.currentPlaylist = [];
+            $scope.currentPlaylist.push($scope.currentSongs[index]);
+            $scope.playListSize = 1;
+            index = 0;
+            break;
+          }
         default:
           break;
       }
+      return $scope.play(index);
     }else{
       if(audio===null) {
         $scope.currentSong.name = $scope.currentPlaylist[0].song;
