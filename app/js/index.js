@@ -131,22 +131,18 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
     }else if(index!==undefined && parentIndex!==undefined){
       switch($scope.currentView){
         case ALBUM_VIEW:
-        $scope.currentPlaylist = $scope.albumSorted[parentIndex].songs;
-        $scope.playListSize = $scope.albumSorted[parentIndex].songs.length;
-        return $scope.play(index);
-        // $scope.play(getActualIndex(parentIndex, index, $scope.albumSorted));
-        break;
+          $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.albumSorted[parentIndex].songs));
+          $scope.playListSize = $scope.albumSorted[parentIndex].songs.length;
+          return $scope.play(index);
         case FOLDER_VIEW:
-        $scope.currentPlaylist = $scope.folderSorted[parentIndex].songs;
-        $scope.playListSize = $scope.folderSorted[parentIndex].songs.length;
-        return$scope.play(index);
-        // $scope.play(getActualIndex(parentIndex, index, $scope.folderSorted));
-        break;
+          $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.folderSorted[parentIndex].songs));
+          $scope.playListSize = $scope.folderSorted[parentIndex].songs.length;
+          return$scope.play(index);
         case ALL_VIEW:
-        $scope.currentPlaylist = $scope.currentSongs;
-        $scope.play(index);
+          $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
+          $scope.play(index);
         default:
-        break;
+          break;
       }
     }else{
       if(audio===null) {
@@ -184,12 +180,16 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
         });
       });
 
+
       /* Update seekbar as the song is progressing */
       audio.addEventListener('timeupdate', ()=>{
         $scope.$apply(()=>{
-          $scope.player.currentTime = audio.currentTime;
+          if(audio!==null){
+            $scope.player.currentTime = audio.currentTime;
+          }
         });
       });
+
 
       /* Listener for when a song has finished */
       audio.addEventListener("ended", ()=>{
@@ -404,11 +404,16 @@ app.controller('MainController', ($scope, $mdDialog, $rootScope)=>{
           $scope.playing = false;
         }
         $scope.delete = function(index){
+          $scope.songs.splice(index, 1);
           if(index===$scope.currentSong.index){
             $scope.pause(true);
           }
-          $scope.songs.splice(index, 1);
+          if(index<$scope.currentSong.index){
+            parent.currentSong.index--;
+          }
+          $scope.currentSong = parent.currentSong;
           $scope.currentSong.next = $scope.songs[getNextIndex($scope.currentSong.index, $scope.songs.length)].song;
+          parent.playListSize = $scope.songs.length;
         };
       },
       targetEvent: $event,
