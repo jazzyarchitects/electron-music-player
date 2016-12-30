@@ -19,14 +19,13 @@ const PLAYLIST_VIEW = 0;
 const ALBUM_VIEW = 1;
 const ALL_VIEW = 2;
 const FOLDER_VIEW = 3;
-app.config(['$compileProvider', function ($compileProvider) {
+app.config(['$compileProvider', function($compileProvider) {
     $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension|file):/);
 }]);
 
 app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
-
   /* Basic environment setup */
-  $scope.currentView = 1;
+  $scope.currentView = 2;
 
   $scope.songs = [];
   $scope.folderSorted = [];
@@ -60,7 +59,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   // Watching currentSongs list (changes with search Query) to change playListSize required in next() and prev() functions
   // Causing trouble as this is being called after other functions are done using the old values :(
   $scope.$watch('currentPlaylist', ()=>{
-    if($scope.currentPlaylist === undefined){
+    if($scope.currentPlaylist === undefined) {
       return;
     }
     $scope.playListSize = $scope.currentPlaylist.length;
@@ -68,9 +67,9 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
 
   $scope.$watch('searchQuery', ()=>{
     $scope.currentSongs = $scope.songs.filter(liveSearchFilter($scope.searchQuery));
-    if($scope.searchQuery==="" && $scope.temp.currentView!==undefined){
+    if($scope.searchQuery==="" && $scope.temp.currentView!==undefined) {
       $scope.changeView($scope.temp.currentView);
-    }else if($scope.searchQuery!==""){
+    }else if($scope.searchQuery!=="") {
       if($scope.temp.currentView===undefined) $scope.temp.currentView = $scope.currentView;
       $scope.changeView(ALL_VIEW, true);
     }
@@ -82,7 +81,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     $scope.player.songCount = $scope.songs.length;
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
     $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
-    if($scope.currentSong.next===""){
+    if($scope.currentSong.next==="") {
       $scope.currentSong.next = $scope.currentSongs[0].song;
     }
     $scope.playListSize = $scope.currentPlaylist.length;
@@ -100,7 +99,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     });
     folderSorterWorker.postMessage($scope.songs);
 
-    //Album Sorter cannot work in Worker. Instead using setTimeout to access node folder and run async
+    // Album Sorter cannot work in Worker. Instead using setTimeout to access node folder and run async
     setTimeout(()=>{
       albumSorter($scope.songs)
       .then((f)=>{
@@ -109,13 +108,12 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
           $scope.albumSorted = f;
         });
       });
-    },0);
-
+    }, 0);
   };
 
   /* Function to play a selected audio file, or the previously paused*/
   $scope.play = function(parentIndex, index) {
-    if(index===undefined){
+    if(index===undefined) {
       index = parentIndex;
       parentIndex = undefined;
     }
@@ -128,11 +126,11 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     // If index undefined i.e. Directly clicking play button without selecting song, then play first song else play selected song
     // For All songs list
 
-    if($scope.currentPlaylist === undefined || $scope.currentPlaylist.length<=0){
+    if($scope.currentPlaylist === undefined || $scope.currentPlaylist.length<=0) {
       $scope.currentPlaylist = $scope.songs;
     }
     if(index!==undefined && parentIndex===undefined) {
-      if(audio!==null){
+      if(audio!==null) {
         audio.pause();
       }
       audio = null;
@@ -141,8 +139,8 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
       $scope.currentSong.imageURL = undefined;
       $scope.currentSong.directory = $scope.currentPlaylist[index].directory;
       songPath = "file://"+$scope.currentPlaylist[index].directory + '/' + $scope.currentSong.name;
-    }else if(index!==undefined && parentIndex!==undefined){
-      switch($scope.currentView){
+    }else if(index!==undefined && parentIndex!==undefined) {
+      switch($scope.currentView) {
         case ALBUM_VIEW:
           $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.albumSorted[parentIndex].songs));
           // $scope.playListSize = $scope.albumSorted[parentIndex].songs.length;
@@ -152,7 +150,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
           // $scope.playListSize = $scope.folderSorted[parentIndex].songs.length;
           break;
         case ALL_VIEW:
-          if($scope.searchQuery==="" || $scope.searchQuery==='' || $scope.searchQuery===undefined || $scope.searchQuery===null){
+          if($scope.searchQuery==="" || $scope.searchQuery==='' || $scope.searchQuery===undefined || $scope.searchQuery===null) {
             $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
             // $scope.playListSize = $scope.currentPlaylist.length;
             break;
@@ -207,7 +205,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
       /* Update seekbar as the song is progressing */
       audio.addEventListener('timeupdate', ()=>{
         $scope.$apply(()=>{
-          if(audio!==null){
+          if(audio!==null) {
             $scope.player.currentTime = audio.currentTime;
           }
         });
@@ -226,20 +224,19 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
       });
     }
 
-    if($scope.player.shuffle.toLowerCase()==="off"){
+    if($scope.player.shuffle.toLowerCase()==="off") {
       $scope.playListSize = $scope.currentPlaylist.length;
       let i = getNextIndex($scope.currentSong.index, $scope.playListSize);
-      if(i>=0){
+      if(i>=0) {
         $scope.currentSong.next = $scope.currentPlaylist[i].song;
       }else{
         $scope.currentSong.next = $scope.currentSong.name;
       }
-
     }else{
       $scope.currentSong.next = "Surprise Surprise :)";
     }
 
-    if($scope.player.repeat.toLowerCase()==="current"){
+    if($scope.player.repeat.toLowerCase()==="current") {
       $scope.currentSong.next = $scope.currentSong.name;
     }
 
@@ -258,7 +255,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     if(stop===true) {
       audio = null;
       // First check is already in digest cycle before $apply
-      if(!$scope.$$phase){
+      if(!$scope.$$phase) {
         $scope.$apply(()=>{
           $scope.player.currentTime = 0;
           $scope.player.duration = 0;
@@ -372,24 +369,24 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   }
 
   // Selecting different views (Playlist, Album, All or Folders)
-  $scope.changeView = function(view, preventReset){
-    if(preventReset!==true){
+  $scope.changeView = function(view, preventReset) {
+    if(preventReset!==true) {
       $scope.temp.currentView = undefined;
     }
     // Prevent unnecessary functions if current button is pressed again
-    if(view === $scope.currentView){
+    if(view === $scope.currentView) {
       return;
     }
     $scope.currentView = view;
   }
 
-  $scope.addToCurrentPlaylist = function(parentIndex, index){
-    if(parentIndex!==undefined && index===undefined){
+  $scope.addToCurrentPlaylist = function(parentIndex, index) {
+    if(parentIndex!==undefined && index===undefined) {
       index = parentIndex;
       parentIndex = undefined;
     }
-    //Need to use $parent.$parent.$index for album and folder. I guess a single $parent refers to menu itme
-    switch($scope.currentView){
+    // Need to use $parent.$parent.$index for album and folder. I guess a single $parent refers to menu itme
+    switch($scope.currentView) {
       case ALBUM_VIEW:
         $scope.currentPlaylist.push($scope.albumSorted[parentIndex].songs[index]);
         break;
@@ -406,7 +403,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   };
 
   let parent = $scope;
-  $scope.showCurrentPlayist = function($event){
+  $scope.showCurrentPlayist = function($event) {
     $mdDialog.show({
       controller: ($scope, $mdDialog)=> {
         $scope.cancel= ()=>{
@@ -416,8 +413,8 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
         $scope.songs = parent.currentPlaylist;
         $scope.playing = parent.isPlaying;
 
-        $scope.play = function(index){
-          if(parent.isPlaying){
+        $scope.play = function(index) {
+          if(parent.isPlaying) {
             $scope.pause();
           }
           parent.play(index);
@@ -425,18 +422,18 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
           $scope.currentSong = parent.currentSong;
         };
 
-        $scope.pause = function(stop){
+        $scope.pause = function(stop) {
           parent.pause(stop);
           $scope.playing = false;
           $scope.reload();
         };
 
-        $scope.delete = function(index){
-          if(index===$scope.currentSong.index){
+        $scope.delete = function(index) {
+          if(index===$scope.currentSong.index) {
             $scope.pause(true);
           }
           $scope.songs.splice(index, 1);
-          if(index<$scope.currentSong.index){
+          if(index<$scope.currentSong.index) {
             parent.currentSong.index--;
           }
           $scope.currentSong = parent.currentSong;
@@ -444,36 +441,35 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
           $scope.currentSong.next = $scope.songs[getNextIndex($scope.currentSong.index, $scope.songs.length)].song;
         };
 
-        $scope.reload = function(){
+        $scope.reload = function() {
           $scope.currentSong = parent.currentSong;
           $scope.playing = parent.isPlaying;
-          if($scope.songs===undefined || $scope.songs.length<=0){
+          if($scope.songs===undefined || $scope.songs.length<=0) {
             $scope.songs = parent.currentPlaylist;
           }
         }
 
-        $scope.next = function(){
+        $scope.next = function() {
           parent.next();
           $scope.reload();
         };
 
-        $scope.prev = function(){
+        $scope.prev = function() {
           parent.prev();
           $scope.reload();
         };
 
-        $scope.togglePlay = function(){
+        $scope.togglePlay = function() {
           parent.togglePlay();
           $scope.reload();
         };
 
-        $scope.clear = function(){
+        $scope.clear = function() {
           $scope.pause(true);
           $scope.songs = [];
           parent.currentPlaylist = undefined;
           $scope.cancel();
         };
-
       },
       targetEvent: $event,
       controllerAs: 'Player',
@@ -520,12 +516,12 @@ function liveSearchFilter(query) {
 }
 
 // In arrays like album sorted and folder sorted (those with nested objects), function to get the actual index of the songs from the list
-function getActualIndex(parentIndex, index, list){
+function getActualIndex(parentIndex, index, list) {
   let actualIndex = 0;
-  for(let i=0;i<list.length;i++){
-    if(i<parentIndex){
+  for(let i=0; i<list.length; i++) {
+    if(i<parentIndex) {
       actualIndex += list[i].songs.length;
-    }else if(i===parentIndex){
+    }else if(i===parentIndex) {
       actualIndex += index;
       return actualIndex;
     }else{

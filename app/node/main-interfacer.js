@@ -9,7 +9,7 @@ module.exports = function($scope) {
   let ipc = electron.ipcRenderer;
 
   ipcRenderer.on('Change', (event, arg)=>{
-    switch(arg.type){
+    switch(arg.type) {
       case 'MusicLibrary':
         $scope.$apply(()=>{
           $scope.init();

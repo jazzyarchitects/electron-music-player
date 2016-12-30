@@ -5,7 +5,7 @@ const path = require('path');
 const BrowserWindow = electron.BrowserWindow;
 
 
-module.exports = function(parentWindow){
+module.exports = function(parentWindow) {
     let settingsWindow =new BrowserWindow({
     parent: parentWindow,
     height: 406,

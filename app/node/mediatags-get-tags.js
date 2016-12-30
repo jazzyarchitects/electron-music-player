@@ -8,7 +8,7 @@ module.exports = function(filePath) {
     let file = fs.readFileSync(filePath);
     id3.parse(file)
       .then((tag)=>{
-        if(!tag.image){
+        if(!tag.image) {
           tag.imageURL = "img/album-empty.jpeg";
           return resolve(tag);
         }

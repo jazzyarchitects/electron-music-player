@@ -5,7 +5,7 @@ const id3 = require('id3-parser');
 const path = require('path');
 const fs = require('fs');
 
-let albumRetreiver = function(song){
+let albumRetreiver = function(song) {
   let songPath = path.join(song.directory, song.song);
   return new Promise((resolve)=>{
     fs.readFile(songPath, (err, buf)=>{
@@ -18,7 +18,7 @@ let albumRetreiver = function(song){
   });
 };
 
-let decode = function(songs){
+let decode = function(songs) {
   return new Promise((resolve)=>{
     let a = [];
     async.forEachLimit(songs, 6, (song, _cb)=>{
@@ -33,12 +33,12 @@ let decode = function(songs){
   });
 };
 
-let sort = function(albumData){
+let sort = function(albumData) {
   let albums = [];
   let albumSongs = {};
-  for(let i=0;i<albumData.length;i++){
+  for(let i=0; i<albumData.length; i++) {
     let obj = albumData[i];
-    if(albums.indexOf(obj.album)===-1){
+    if(albums.indexOf(obj.album)===-1) {
       albums.push(obj.album);
       albumSongs[obj.album] = [];
     }
@@ -46,13 +46,13 @@ let sort = function(albumData){
   }
 
   let a = [];
-  for(let album of Object.keys(albumSongs)){
+  for(let album of Object.keys(albumSongs)) {
     a.push({album: album, songs: albumSongs[album]});
   }
   return a;
 }
 
-let getAlbumImage = function(albumSorted){
+let getAlbumImage = function(albumSorted) {
   return new Promise((resolve, reject)=>{
     async.forEachLimit(albumSorted, 1, (album, _cb)=>{
       let song = album.songs[0];
@@ -60,7 +60,7 @@ let getAlbumImage = function(albumSorted){
       let buf = fs.readFileSync(filePath);
       id3.parse(buf)
       .then((tag)=>{
-        if(!tag.image){
+        if(!tag.image) {
           return _cb();
         }
         tag.image.mime = tag.image.mime.replace(/jpeg/g, 'jpg');
@@ -73,12 +73,12 @@ let getAlbumImage = function(albumSorted){
   });
 }
 
-let main = function(songs){
+let main = function(songs) {
   return new Promise((resolve)=>{
     decode(songs)
     .then((albumData)=>{
       getAlbumImage(sort(albumData))
-      .then(a=>{
+      .then((a)=>{
         resolve(a);
       });
     });

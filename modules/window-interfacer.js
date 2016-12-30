@@ -1,8 +1,7 @@
 "use strict";
 
 let electron = null;
-module.exports = function(mainWindow){
-
+module.exports = function(mainWindow) {
   const electron = require('electron');
   const path = require('path');
   const dialog = electron.dialog;
@@ -11,7 +10,7 @@ module.exports = function(mainWindow){
   let settingsWindow = null;
 
   ipcMain.on('ButtonEvent', (event, arg)=>{
-    switch(arg){
+    switch(arg) {
       case 'ShowSettings':
       settingsWindow = require(path.join(__dirname, '..', 'windows', 'settings'))(mainWindow);
       break;
@@ -21,7 +20,7 @@ module.exports = function(mainWindow){
   });
 
   ipcMain.on('Dialog', (event, arg)=>{
-    switch(arg){
+    switch(arg) {
       case 'LibrarySelect':
         dialog.showOpenDialog(settingsWindow, {
           properties: ['openDirectory', 'multiSelections']
@@ -34,7 +33,7 @@ module.exports = function(mainWindow){
   });
 
   ipcMain.on('Change', (event, arg)=>{
-    switch(arg.type){
+    switch(arg.type) {
       case 'MusicLibrary':
         mainWindow.webContents.send('Change', arg);
       default:

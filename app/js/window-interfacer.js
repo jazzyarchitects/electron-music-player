@@ -14,6 +14,6 @@ function closeWindow() {
   w.close();
 }
 
-function showSettings(){
+function showSettings() {
   ipcRenderer.send('ButtonEvent', 'ShowSettings');
 }
