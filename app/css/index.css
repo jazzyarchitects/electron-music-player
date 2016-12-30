@@ -336,8 +336,17 @@ input:focus{
   transition-duration: 500ms;
 }
 
+.active-song{
+  background: rgba(0,0,0,0.9);
+}
+
+
 .song-item{
   background: initial;
+}
+
+.song-item .fa{
+  font-size: 12px;
 }
 
 .song-item:focus{
@@ -355,6 +364,16 @@ input:focus{
 .directory-item-holder .song-item-holder:hover{
   background: rgba(0,0,0,0.7);;
   transition-duration: 500ms;
+}
+
+.directory-item:focus, .directory-item-holder:focus, .folder-item:focus, .folder-item-holder:focus{
+  outline: none;
+}
+
+.countSpan{
+  width: 100%;
+  color: rgba(255,255,255,0.8);
+  font-size: 10px;
 }
 
 .player-extras{

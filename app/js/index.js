@@ -51,6 +51,9 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     endTime: 0,
     duration: 0,
     volume: 100,
+    songCount: 0,
+    albumCount: 0,
+    folderCount: 0,
     playedIndices: []
   };
 
@@ -73,6 +76,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   /* Initial loading from the music directory */
   $scope.init = ()=>{
     $scope.songs = readFileFromDirectory();
+    $scope.player.songCount = $scope.songs.length;
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
     $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
     if($scope.currentSong.next===""){
@@ -86,6 +90,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     // Sorting folder wise in a different worker thread
     let folderSorterWorker = new Worker(path.join(__dirname, 'js', 'folder-sorter.js'));
     folderSorterWorker.addEventListener('message', (e)=>{
+      $scope.player.folderCount = e.data.length;
       $scope.$apply(()=>{
         $scope.folderSorted = e.data;
       })
@@ -96,6 +101,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     setTimeout(()=>{
       albumSorter($scope.songs)
       .then((f)=>{
+        $scope.player.albumCount = f.length;
         $scope.$apply(()=>{
           $scope.albumSorted = f;
         });

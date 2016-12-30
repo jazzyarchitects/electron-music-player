@@ -58,10 +58,10 @@
               <i class="fa fa-book"></i>&nbsp;&nbsp;{{ album.album }}
             </div>
             <div ng-class="{dataContent:true, activeContent:album.expanded}">
-              <div ng-repeat="song in album.songs" class="song-item-holder" layout="row">
+              <div ng-repeat="song in album.songs" ng-class="{'active-song': song.song===currentSong.name}" class="song-item-holder" layout="row">
                 <a ng-click="play($parent.$index, $index)" flex="90">
                   <div class="song-item">
-                    {{ song.song | extentionFixer }}
+                    <i class="fa" ng-class="isPlaying?'fa-play':'fa-pause'" ng-if="song.song===currentSong.name">&nbsp;&nbsp;</i>{{ song.song | extentionFixer }}
                   </div>
                 </a>
                 <md-menu flex="10"  >
@@ -81,14 +81,16 @@
               </div>
             </div>
           </div>
+          <center><span class="countSpan">{{ player.songCount }}&nbsp; songs in {{ player.albumCount }}&nbsp; Albums</span></center>
         </div>
 
         <!-- All Songs -->
         <div ng-if="currentView===2">
-          <div ng-repeat="song in currentSongs" class="song-item-holder" layout="row">
+        <div  ng-repeat="song in currentSongs">
+          <div class="song-item-holder" ng-class="{'active-song': song.song===currentSong.name}" layout="row">
             <a  ng-click="play(0,$index)" flex="90">
               <div class="song-item">
-                {{song.song | extentionFixer}}
+                <i class="fa" ng-class="isPlaying?'fa-play':'fa-pause'" ng-if="song.song===currentSong.name">&nbsp;&nbsp;</i>{{song.song | extentionFixer}}
               </div>
             </a>
             <md-menu flex="10"  >
@@ -107,18 +109,20 @@
             </md-menu>
           </div>
         </div>
+          <center><span class="countSpan">{{ player.songCount }}&nbsp; songs </span></center>
+        </div>
 
         <!-- Folder View -->
         <div ng-if="currentView===3" class="md-accordion">
-          <div ng-repeat="folder in folderSorted" class="folder-item-holder">
+          <div ng-repeat="folder in folderSorted" class="folder-item-holder" >
             <div class="folder-item" ng-init="folder.expanded=false" ng-click="folder.expanded=!folder.expanded">
               <i class="fa fa-folder"></i>&nbsp;&nbsp;<u>{{ folder.directory | directoryNameFixer}}</u>
             </div>
             <div  ng-class="{dataContent:true, activeContent:folder.expanded}">
-              <div ng-repeat="song in folder.songs" class="song-item-holder" layout="row">
+              <div ng-repeat="song in folder.songs" class="song-item-holder"  ng-class="{'active-song': song.song===currentSong.name}" layout="row">
                 <a  ng-click="play($parent.$index, $index)" flex="90">
                   <div class="song-item">
-                    {{song.song | extentionFixer}}
+                    <i class="fa" ng-class="isPlaying?'fa-play':'fa-pause'" ng-if="song.song===currentSong.name">&nbsp;&nbsp;</i>{{song.song | extentionFixer}}
                   </div>
                 </a>
                 <md-menu flex="10"  >
@@ -138,6 +142,7 @@
               </div>
             </div>
           </div>
+          <center><span class="countSpan">{{ player.songCount }}&nbsp; songs in {{ player.folderCount }}&nbsp; Folders</span></center>
         </div>
 
 
