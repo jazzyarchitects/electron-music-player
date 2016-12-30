@@ -59,9 +59,12 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
 
   // Watching currentSongs list (changes with search Query) to change playListSize required in next() and prev() functions
   // Causing trouble as this is being called after other functions are done using the old values :(
-  // $scope.$watch('currentPlaylist', ()=>{
-  //   $scope.playListSize = $scope.currentPlaylist.length;
-  // }, true);
+  $scope.$watch('currentPlaylist', ()=>{
+    if($scope.currentPlaylist === undefined){
+      return;
+    }
+    $scope.playListSize = $scope.currentPlaylist.length;
+  }, true);
 
   $scope.$watch('searchQuery', ()=>{
     $scope.currentSongs = $scope.songs.filter(liveSearchFilter($scope.searchQuery));
@@ -124,6 +127,10 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
 
     // If index undefined i.e. Directly clicking play button without selecting song, then play first song else play selected song
     // For All songs list
+
+    if($scope.currentPlaylist === undefined || $scope.currentPlaylist.length<=0){
+      $scope.currentPlaylist = $scope.songs;
+    }
     if(index!==undefined && parentIndex===undefined) {
       if(audio!==null){
         audio.pause();
@@ -257,12 +264,18 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
           $scope.player.duration = 0;
           $scope.player.endTime = 0;
           $scope.currentSong.name = "";
+          $scope.currentSong.index = -1;
+          $scope.currentSong.imageURL = undefined;
+          $scope.currentSong.next = $scope.songs[0].song;
         });
       }else{
         $scope.player.currentTime = 0;
         $scope.player.duration = 0;
         $scope.player.endTime = 0;
         $scope.currentSong.name = "";
+        $scope.currentSong.index = -1;
+        $scope.currentSong.imageURL = undefined;
+        $scope.currentSong.next = $scope.songs[0].song;
       }
     }
     $scope.isPlaying = false;
@@ -415,6 +428,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
         $scope.pause = function(stop){
           parent.pause(stop);
           $scope.playing = false;
+          $scope.reload();
         };
 
         $scope.delete = function(index){
@@ -433,6 +447,9 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
         $scope.reload = function(){
           $scope.currentSong = parent.currentSong;
           $scope.playing = parent.isPlaying;
+          if($scope.songs===undefined || $scope.songs.length<=0){
+            $scope.songs = parent.currentPlaylist;
+          }
         }
 
         $scope.next = function(){
@@ -448,7 +465,14 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
         $scope.togglePlay = function(){
           parent.togglePlay();
           $scope.reload();
-        }
+        };
+
+        $scope.clear = function(){
+          $scope.pause(true);
+          $scope.songs = [];
+          parent.currentPlaylist = undefined;
+          $scope.cancel();
+        };
 
       },
       targetEvent: $event,

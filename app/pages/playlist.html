@@ -9,46 +9,49 @@
     </md-toolbar>
 
     <md-dialog-content style="overflow: hidden;">
-    <div class="player-controls" layout="row">
-      <div class="control" flex="33">
-        <a href="#" ng-click="prev()"><i class="fa fa-fast-backward" aria-hidden="true"></i></a>
-      </div>
-      <div class="control" flex="33">
-        <a ng-click="togglePlay()">
-          <i class="fa" ng-class="!playing? 'fa-play-circle' : 'fa-pause-circle'" aria-hidden="true">
-          </i>
-        </a>
-      </div>
-      <div class="control" flex="33">
-        <a ng-click="next()"><i class="fa fa-fast-forward" aria-hidden="true"></i></a>
-      </div>
-    </div>
-      <div class="music-list-holder dialog-content">
-      <div class="music-list">
-        <div ng-repeat="song in songs track by $index" class="song-item-holder" layout="row">
-          <a  ng-click="play($index)" flex="90">
-            <div class="song-item">
-              <i class="fa" ng-class="playing ? 'fa-play' : 'fa-pause'" style="color: #fff;" ng-if="currentSong.index===$index">&nbsp;&nbsp;</i>{{song.song | extentionFixer}}
-            </div>
-          </a>
-          <div class="song-item" flex="10" title="Remove from Playlist" ng-click="delete($index)">
-            <i class="fa fa-close"></i>
-            </div>
+      <div class="player-controls" layout="row">
+        <div class="control" flex="33">
+          <a href="#" ng-click="prev()"><i class="fa fa-fast-backward" aria-hidden="true"></i></a>
         </div>
+        <div class="control" flex="33">
+          <a ng-click="togglePlay()">
+            <i class="fa" ng-class="!playing? 'fa-play-circle' : 'fa-pause-circle'" aria-hidden="true">
+            </i>
+          </a>
+        </div>
+        <div class="control" flex="33">
+          <a ng-click="next()"><i class="fa fa-fast-forward" aria-hidden="true"></i></a>
+        </div>
+      </div>
+      <div class="music-list-holder dialog-content">
+      <div class="music-list" ng-hide="songs.length<=0 || songs===undefined">
+          <div ng-repeat="song in songs track by $index" class="song-item-holder" layout="row">
+            <a  ng-click="play($index)" flex="90">
+              <div class="song-item">
+                <i class="fa" ng-class="playing ? 'fa-play' : 'fa-pause'" style="color: #fff;" ng-if="currentSong.index===$index">&nbsp;&nbsp;</i>{{song.song | extentionFixer}}
+              </div>
+            </a>
+            <div class="song-item" flex="10" title="Remove from Playlist" ng-click="delete($index)">
+              <i class="fa fa-close"></i>
+            </div>
+          </div>
+        </div>
+        <div ng-show="songs.length<=0 || songs===undefined">
+          <span style="color: #fff; font-size: 14px;"><center>No songs in the queue. Select a song to start playing :)</center></span>
         </div>
       </div>
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-      <span>{{ songs.length }}&nbsp; songs in this playlist</span>
+      <span>{{ songs.length || 0 }}&nbsp; songs in this playlist</span>
       <span flex></span>
       <md-button ng-click="">
        Save List
-      </md-button>
-      <md-button ng-click="">
-        Clear
-      </md-button>
-    </md-dialog-actions>
+     </md-button>
+     <md-button ng-click="clear()">
+      Clear
+    </md-button>
+  </md-dialog-actions>
 
-  </form>
+</form>
 </md-dialog>
