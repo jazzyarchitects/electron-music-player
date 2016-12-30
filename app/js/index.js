@@ -108,7 +108,6 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
 
   /* Function to play a selected audio file, or the previously paused*/
   $scope.play = function(parentIndex, index) {
-    console.log("Playing: Current playList Size: "+$scope.currentPlaylist.length);
     if(index===undefined){
       index = parentIndex;
       parentIndex = undefined;
@@ -372,10 +371,12 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   }
 
   $scope.addToCurrentPlaylist = function(parentIndex, index){
+    console.log("ParentIndex: "+parentIndex+"   index: "+index);
     if(parentIndex!==undefined && index===undefined){
       index = parentIndex;
       parentIndex = undefined;
     }
+    //Need to use $parent.$parent.$index for album and folder. I guess a single $parent refers to menu itme
     switch($scope.currentView){
       case ALBUM_VIEW:
         $scope.currentPlaylist.push($scope.albumSorted[parentIndex].songs[index]);

@@ -57,12 +57,26 @@
               <i class="fa fa-book"></i>&nbsp;&nbsp;<u>{{ album.album }}</u>
             </div>
             <div ng-class="{dataContent:true, activeContent:album.expanded}">
-              <div ng-repeat="song in album.songs" class="song-item-holder">
-                <a ng-click="play($parent.$index, $index)">
+              <div ng-repeat="song in album.songs" class="song-item-holder" layout="row">
+                <a ng-click="play($parent.$index, $index)" flex="90">
                   <div class="song-item">
-                    {{ song.song }}
+                    {{ song.song | extentionFixer }}
                   </div>
                 </a>
+                <md-menu flex="10"  >
+                  <div class="menu-button" ng-click="$mdOpenMenu($event)">
+                    <i md-menu-origin class="fa fa-caret-down"></i>
+                  </div>
+                  <md-menu-content md-menu-align-target>
+                    <md-menu-item>
+                    <md-button ng-click="play($parent.$parent.$index, $index)">Play</md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="addToCurrentPlaylist($parent.$parent.$index, $index)">Add to Playlist</md-button>
+                    </md-menu-item>
+                  </md-menu-content>
+                  <!-- <i class="fa fa-caret-down"></i> -->
+                </md-menu>
               </div>
             </div>
           </div>
@@ -77,17 +91,17 @@
               </div>
             </a>
             <md-menu flex="10"  >
-                <div class="menu-button" ng-click="$mdOpenMenu($event)">
-                  <i md-menu-origin class="fa fa-caret-down"></i>
-                </div>
-                <md-menu-content md-menu-align-target>
-                  <md-menu-item>
-                    <md-button ng-click="play(0, $index)">Play</md-button>
-                  </md-menu-item>
-                  <md-menu-item>
-                    <md-button ng-click="addToCurrentPlaylist($index)">Add to Playlist</md-button>
-                  </md-menu-item>
-                </md-menu-content>
+              <div class="menu-button" ng-click="$mdOpenMenu($event)">
+                <i md-menu-origin class="fa fa-caret-down"></i>
+              </div>
+              <md-menu-content md-menu-align-target>
+                <md-menu-item>
+                  <md-button ng-click="play(0, $index)">Play</md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="addToCurrentPlaylist($index)">Add to Playlist</md-button>
+                </md-menu-item>
+              </md-menu-content>
               <!-- <i class="fa fa-caret-down"></i> -->
             </md-menu>
           </div>
@@ -100,12 +114,26 @@
               <i class="fa fa-folder"></i>&nbsp;&nbsp;<u>{{ folder.directory | directoryNameFixer}}</u>
             </div>
             <div  ng-class="{dataContent:true, activeContent:folder.expanded}">
-              <div ng-repeat="song in folder.songs" class="song-item-holder">
-                <a  ng-click="play($parent.$index, $index)">
+              <div ng-repeat="song in folder.songs" class="song-item-holder" layout="row">
+                <a  ng-click="play($parent.$index, $index)" flex="90">
                   <div class="song-item">
                     {{song.song | extentionFixer}}
                   </div>
                 </a>
+                <md-menu flex="10"  >
+                  <div class="menu-button" ng-click="$mdOpenMenu($event)">
+                    <i md-menu-origin class="fa fa-caret-down"></i>
+                  </div>
+                  <md-menu-content md-menu-align-target>
+                    <md-menu-item>
+                      <md-button ng-click="play($parent.$parent.$index, $index)">Play</md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                      <md-button ng-click="addToCurrentPlaylist($parent.$parent.$index, $index)">Add to Playlist</md-button>
+                    </md-menu-item>
+                  </md-menu-content>
+                  <!-- <i class="fa fa-caret-down"></i> -->
+                </md-menu>
               </div>
             </div>
           </div>
@@ -173,13 +201,13 @@
           <span ng-if="player.repeat!=='Current' && player.shuffle!=='On' && currentSong.next!==''"><b><u>Next:</u></b>&nbsp;&nbsp;{{ currentSong.next | extentionFixer }}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down rotate-180"></i></span>
         </div>
         <div flex="40">
-        <div class="volume-control-holder" layout="row">
-          <i class="fa fa-volume-down" ng-click="decreaseVolume()"></i>
-          <md-slider-container>
-            <md-slider min="0" max="100" class="md-primary md-hue-4" ng-model="player.volume" step="5" type="range" name="volume-seekbar" id="volume-seekbar" ng-mouseup="changeVolume()"></md-slider>
-          </md-slider-container>
-          <i class="fa fa-volume-up" ng-click="increaseVolume()"></i>
-        </div>
+          <div class="volume-control-holder" layout="row">
+            <i class="fa fa-volume-down" ng-click="decreaseVolume()"></i>
+            <md-slider-container>
+              <md-slider min="0" max="100" class="md-primary md-hue-4" ng-model="player.volume" step="5" type="range" name="volume-seekbar" id="volume-seekbar" ng-mouseup="changeVolume()"></md-slider>
+            </md-slider-container>
+            <i class="fa fa-volume-up" ng-click="increaseVolume()"></i>
+          </div>
         </div>
       </div>
     </div>
