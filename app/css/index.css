@@ -274,14 +274,51 @@ input:focus{
   margin-bottom: 0px;
 }
 
-.directory-item{
-  margin-bottom: 1px;
+.directory-item, .folder-item{
   padding: 5px;
-  color: #fff;
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
+  /*background: rgba(0,0,0,0.75);*/
+  /*color: #fff;*/
+  background: rgba(255,255,255,1);
+  margin: 7px;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.folder-item{
   background: rgba(0,0,0,0.75);
+  color: #fff;
+  margin: 0px;
+  margin-bottom: 1px;
+}
+
+.directory-item:hover{
+  /*margin: 3px;
+  margin-bottom: 7px;*/
+  background: rgba(240,240,240,1);
+  transition-duration: 250ms;
+}
+
+.directory-item .fa{
+  color: #222;
+}
+
+.directory-item:first-child{
+  margin-bottom: 1px;
+}
+
+.directory-item img{
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  box-shadow: 0px 0px 5px #000;
+}
+
+.directory-item:hover img{
+  box-shadow: 0px 0px 10px #000;
+  transition-duration: 250ms;
 }
 
 .directory-item:focus{
@@ -304,6 +341,10 @@ input:focus{
 }
 
 .song-item:focus{
+  outline: none;
+}
+
+.menu-button:focus{
   outline: none;
 }
 

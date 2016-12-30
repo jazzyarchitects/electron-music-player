@@ -52,12 +52,35 @@ let sort = function(albumData){
   return a;
 }
 
+let getAlbumImage = function(albumSorted){
+  return new Promise((resolve, reject)=>{
+    async.forEachLimit(albumSorted, 1, (album, _cb)=>{
+      let song = album.songs[0];
+      let filePath = path.join(song.directory, song.song);
+      let buf = fs.readFileSync(filePath);
+      id3.parse(buf)
+      .then((tag)=>{
+        if(!tag.image){
+          return _cb();
+        }
+        tag.image.mime = tag.image.mime.replace(/jpeg/g, 'jpg');
+        album.imageURL = 'data:' + tag.image.mime + ';base64,' + tag.image.data.toString('base64')
+        _cb();
+      });
+    }, ()=>{
+      resolve(albumSorted);
+    });
+  });
+}
+
 let main = function(songs){
   return new Promise((resolve)=>{
     decode(songs)
     .then((albumData)=>{
-      let a = sort(albumData);
-      resolve(a);
+      getAlbumImage(sort(albumData))
+      .then(a=>{
+        resolve(a);
+      });
     });
   });
 }

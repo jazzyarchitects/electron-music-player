@@ -19,6 +19,9 @@ const PLAYLIST_VIEW = 0;
 const ALBUM_VIEW = 1;
 const ALL_VIEW = 2;
 const FOLDER_VIEW = 3;
+app.config(['$compileProvider', function ($compileProvider) {
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension|file):/);
+}]);
 
 app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
 
@@ -55,7 +58,6 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   // Causing trouble as this is being called after other functions are done using the old values :(
   // $scope.$watch('currentPlaylist', ()=>{
   //   $scope.playListSize = $scope.currentPlaylist.length;
-  //   console.log("Updated playlist size: "+$scope.playListSize);
   // }, true);
 
   $scope.$watch('searchQuery', ()=>{
@@ -84,8 +86,6 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     // Sorting folder wise in a different worker thread
     let folderSorterWorker = new Worker(path.join(__dirname, 'js', 'folder-sorter.js'));
     folderSorterWorker.addEventListener('message', (e)=>{
-      // console.log("Folder Sorted");
-      // console.log(e.data);
       $scope.$apply(()=>{
         $scope.folderSorted = e.data;
       })
@@ -96,8 +96,6 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     setTimeout(()=>{
       albumSorter($scope.songs)
       .then((f)=>{
-        // console.log("Album Sorted");
-        // console.log(f);
         $scope.$apply(()=>{
           $scope.albumSorted = f;
         });
@@ -126,8 +124,8 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
       }
       audio = null;
       $scope.currentSong.index = index;
-      // console.log($scope.currentPlaylist);
       $scope.currentSong.name = $scope.currentPlaylist[index].song;
+      $scope.currentSong.imageURL = undefined;
       $scope.currentSong.directory = $scope.currentPlaylist[index].directory;
       songPath = "file://"+$scope.currentPlaylist[index].directory + '/' + $scope.currentSong.name;
     }else if(index!==undefined && parentIndex!==undefined){
@@ -218,10 +216,6 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     if($scope.player.shuffle.toLowerCase()==="off"){
       $scope.playListSize = $scope.currentPlaylist.length;
       let i = getNextIndex($scope.currentSong.index, $scope.playListSize);
-      // console.log("Playlist size: "+$scope.playListSize);
-      // console.log("i: "+i);
-      // console.log("Playlist: "+JSON.stringify($scope.currentPlaylist));
-      // console.log($scope.currentPlaylist[i]);
       if(i>=0){
         $scope.currentSong.next = $scope.currentPlaylist[i].song;
       }else{
@@ -371,7 +365,6 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   }
 
   $scope.addToCurrentPlaylist = function(parentIndex, index){
-    console.log("ParentIndex: "+parentIndex+"   index: "+index);
     if(parentIndex!==undefined && index===undefined){
       index = parentIndex;
       parentIndex = undefined;

@@ -8,6 +8,10 @@ module.exports = function(filePath) {
     let file = fs.readFileSync(filePath);
     id3.parse(file)
       .then((tag)=>{
+        if(!tag.image){
+          tag.imageURL = "img/album-empty.jpeg";
+          return resolve(tag);
+        }
         tag.imageURL = 'data:' + tag.image.mime + ';base64,' + tag.image.data.toString('base64');
         delete tag.image;
         resolve(tag);

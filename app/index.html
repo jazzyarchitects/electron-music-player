@@ -54,7 +54,8 @@
         <div ng-if="currentView===1">
           <div ng-repeat="album in albumSorted" class="directory-item-holder md-accordion">
             <div class="directory-item" ng-init="album.expanded=false" ng-click="album.expanded=!album.expanded">
-              <i class="fa fa-book"></i>&nbsp;&nbsp;<u>{{ album.album }}</u>
+              <img ng-src="{{ album.imageURL }}" src="img/album-empty.jpeg" />
+              <i class="fa fa-book"></i>&nbsp;&nbsp;{{ album.album }}
             </div>
             <div ng-class="{dataContent:true, activeContent:album.expanded}">
               <div ng-repeat="song in album.songs" class="song-item-holder" layout="row">
@@ -72,7 +73,7 @@
                     <md-button ng-click="play($parent.$parent.$index, $index)">Play</md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="addToCurrentPlaylist($parent.$parent.$index, $index)">Add to Playlist</md-button>
+                      <md-button ng-click="addToCurrentPlaylist($parent.$parent.$index, $index)">Add to Queue</md-button>
                     </md-menu-item>
                   </md-menu-content>
                   <!-- <i class="fa fa-caret-down"></i> -->
@@ -99,7 +100,7 @@
                   <md-button ng-click="play(0, $index)">Play</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="addToCurrentPlaylist($index)">Add to Playlist</md-button>
+                  <md-button ng-click="addToCurrentPlaylist($index)">Add to Queue</md-button>
                 </md-menu-item>
               </md-menu-content>
               <!-- <i class="fa fa-caret-down"></i> -->
@@ -109,8 +110,8 @@
 
         <!-- Folder View -->
         <div ng-if="currentView===3" class="md-accordion">
-          <div ng-repeat="folder in folderSorted" class="directory-item-holder">
-            <div class="directory-item" ng-init="folder.expanded=false" ng-click="folder.expanded=!folder.expanded">
+          <div ng-repeat="folder in folderSorted" class="folder-item-holder">
+            <div class="folder-item" ng-init="folder.expanded=false" ng-click="folder.expanded=!folder.expanded">
               <i class="fa fa-folder"></i>&nbsp;&nbsp;<u>{{ folder.directory | directoryNameFixer}}</u>
             </div>
             <div  ng-class="{dataContent:true, activeContent:folder.expanded}">
@@ -129,7 +130,7 @@
                       <md-button ng-click="play($parent.$parent.$index, $index)">Play</md-button>
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="addToCurrentPlaylist($parent.$parent.$index, $index)">Add to Playlist</md-button>
+                      <md-button ng-click="addToCurrentPlaylist($parent.$parent.$index, $index)">Add to Queue</md-button>
                     </md-menu-item>
                   </md-menu-content>
                   <!-- <i class="fa fa-caret-down"></i> -->
@@ -151,7 +152,7 @@
       <div layout="row" class="player-extras">
         <div class="overlay-black"></div>
         <div class="thumbnail">
-          <img ng-src="{{ currentSong.imageURL }}" class="thumbnail-img" />
+          <img ng-src="{{ currentSong.imageURL }}"  src="img/album-empty.jpeg" class="thumbnail-img" />
         </div>
       </div>
 
