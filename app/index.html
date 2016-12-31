@@ -50,6 +50,28 @@
 
       <div class="music-list">
 
+        <!-- Playlsit View -->
+        <div ng-if="currentView===0">
+          <div ng-repeat="playlist in playlists" class="folder-item-holder md-accordion">
+            <div class="folder-item" ng-init="playlist.expanded=false" ng-click="playlist.expanded=!playlist.expanded">
+              <i class="fa fa-book"></i>&nbsp;&nbsp;<u>{{ playlist.name }}</u>
+            </div>
+            <div ng-class="{dataContent:true, activeContent:playlist.expanded}" class="folder-items">
+              <div ng-repeat="song in playlist.songs" ng-class="{'active-song': song.song===currentSong.name}" class="song-item-holder" layout="row">
+                <a ng-click="playFromPlaylist($parent.$index, $index)" flex="90">
+                  <div class="song-item">
+                    <i class="fa" ng-class="isPlaying?'fa-play':'fa-pause'" ng-if="song.song===currentSong.name">&nbsp;&nbsp;</i>{{ song.song | extentionFixer }}
+                  </div>
+                </a>
+                <div class="song-item" flex="10" title="Remove from Playlist" ng-click="delete($index)">
+                  <i class="fa fa-close"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <center><span class="countSpan">{{ playlists.length }}&nbsp; Playlists</span></center>
+        </div>
+
         <!-- Album View -->
         <div ng-if="currentView===1">
           <div ng-repeat="album in albumSorted" class="directory-item-holder md-accordion">
@@ -70,7 +92,7 @@
                   </div>
                   <md-menu-content md-menu-align-target>
                     <md-menu-item>
-                    <md-button ng-click="play($parent.$parent.$index, $index)">Play</md-button>
+                      <md-button ng-click="play($parent.$parent.$index, $index)">Play</md-button>
                     </md-menu-item>
                     <md-menu-item>
                       <md-button ng-click="addToCurrentPlaylist($parent.$parent.$index, $index)">Add to Queue</md-button>
@@ -86,29 +108,29 @@
 
         <!-- All Songs -->
         <div ng-if="currentView===2">
-        <div  ng-repeat="song in currentSongs">
-          <div class="song-item-holder" ng-class="{'active-song': song.song===currentSong.name}" layout="row">
-            <a  ng-click="play(0,$index)" flex="90">
-              <div class="song-item">
-                <i class="fa" ng-class="isPlaying?'fa-play':'fa-pause'" ng-if="song.song===currentSong.name">&nbsp;&nbsp;</i>{{song.song | extentionFixer}}
-              </div>
-            </a>
-            <md-menu flex="10"  >
-              <div class="menu-button" ng-click="$mdOpenMenu($event)">
-                <i md-menu-origin class="fa fa-caret-down"></i>
-              </div>
-              <md-menu-content md-menu-align-target>
-                <md-menu-item>
-                  <md-button ng-click="play(0, $index)">Play</md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="addToCurrentPlaylist($index)">Add to Queue</md-button>
-                </md-menu-item>
-              </md-menu-content>
-              <!-- <i class="fa fa-caret-down"></i> -->
-            </md-menu>
+          <div  ng-repeat="song in currentSongs">
+            <div class="song-item-holder" ng-class="{'active-song': song.song===currentSong.name}" layout="row">
+              <a  ng-click="play(0,$index)" flex="90">
+                <div class="song-item">
+                  <i class="fa" ng-class="isPlaying?'fa-play':'fa-pause'" ng-if="song.song===currentSong.name">&nbsp;&nbsp;</i>{{song.song | extentionFixer}}
+                </div>
+              </a>
+              <md-menu flex="10"  >
+                <div class="menu-button" ng-click="$mdOpenMenu($event)">
+                  <i md-menu-origin class="fa fa-caret-down"></i>
+                </div>
+                <md-menu-content md-menu-align-target>
+                  <md-menu-item>
+                    <md-button ng-click="play(0, $index)">Play</md-button>
+                  </md-menu-item>
+                  <md-menu-item>
+                    <md-button ng-click="addToCurrentPlaylist($index)">Add to Queue</md-button>
+                  </md-menu-item>
+                </md-menu-content>
+                <!-- <i class="fa fa-caret-down"></i> -->
+              </md-menu>
+            </div>
           </div>
-        </div>
           <center><span class="countSpan">{{ player.songCount }}&nbsp; songs </span></center>
         </div>
 

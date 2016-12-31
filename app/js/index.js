@@ -60,9 +60,12 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
 
   // Watching currentSongs list (changes with search Query) to change playListSize required in next() and prev() functions
   // Causing trouble as this is being called after other functions are done using the old values :(
-  $scope.$watch('currentPlaylist', ()=>{
+  $scope.$watch('currentPlaylist', (newValue, oldValue)=>{
     if($scope.currentPlaylist === undefined) {
       return;
+    }
+    if((oldValue===undefined || oldValue.length<=0) && (newValue.length>0)){
+      $scope.currentSong.next = newValue[0].song;
     }
     $scope.playListSize = $scope.currentPlaylist.length;
   }, true);
@@ -114,8 +117,6 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
 
     Playlist.getAll()
     .then((playlists)=>{
-      console.log("Playlists: ");
-      console.log(playlists);
       $scope.$apply(()=>{
         if(playlists===undefined){
           $scope.playlists = [];
@@ -400,6 +401,11 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
       index = parentIndex;
       parentIndex = undefined;
     }
+
+    if($scope.currentPlaylist===undefined || $scope.currentPlaylist.length<=0){
+      $scope.currentPlaylist = [];
+    }
+
     // Need to use $parent.$parent.$index for album and folder. I guess a single $parent refers to menu itme
     switch($scope.currentView) {
       case ALBUM_VIEW:
@@ -415,6 +421,11 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
         break;
     }
     return;
+  };
+
+  $scope.playFromPlaylist = function(playlistIndex, index){
+    $scope.currentPlaylist = $scope.playlists[playlistIndex].songs;
+    $scope.play(index);
   };
 
   let parent = $scope;
@@ -485,7 +496,12 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
         $scope.clear = function() {
           $scope.pause(true);
           $scope.songs = [];
+          parent.currentSong.name = "";
+          parent.currentSong.index = -1;
+          parent.currentSong.imageURL = "";
+          parent.currentSong.next = undefined;
           parent.currentPlaylist = undefined;
+          $scope.reload();
           $scope.cancel();
         };
 
@@ -493,13 +509,11 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
           if(!$scope.isSaving){
             return $scope.isSaving = true;
           }else{
-            console.log($scope.player.playlistName);
             if($scope.playlistName===''){
               return;
             }
             let pls = Playlist.save($scope.player.playlistName, $scope.songs);
             parent.playlists.push(pls);
-            console.log(parent.playlists);
             $scope.isSaving = false;
           }
         };

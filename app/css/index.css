@@ -362,6 +362,10 @@ input:focus{
   padding-left: 15px;
 }
 
+.folder-items .song-item{
+  font-size: 12px;
+}
+
 .directory-item-holder .song-item-holder:hover{
   background: rgba(0,0,0,0.7);;
   transition-duration: 500ms;
