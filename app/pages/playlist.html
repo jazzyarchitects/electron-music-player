@@ -1,5 +1,5 @@
 <md-dialog aria-label="Currently Playing" flex="60">
-  <form ng-cloak>
+  <form ng-cloak name="playlistForm">
     <md-toolbar class="md-hue-2">
       <div class="md-toolbar-tools">
         <h2>Playing</h2>
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="music-list-holder dialog-content">
-      <div class="music-list" ng-hide="songs.length<=0 || songs===undefined">
+        <div class="music-list" ng-hide="songs.length<=0 || songs===undefined">
           <div ng-repeat="song in songs track by $index" class="song-item-holder" layout="row">
             <a  ng-click="play($index)" flex="90">
               <div class="song-item">
@@ -43,10 +43,19 @@
     </md-dialog-content>
 
     <md-dialog-actions layout="row">
-      <span>{{ songs.length || 0 }}&nbsp; songs in this playlist</span>
+      <span ng-if="!isSaving">{{ songs.length || 0 }}&nbsp; songs in this playlist</span>
+      <span ng-if="isSaving">
+        <md-input-container>
+          <label>Playlist Name</label>
+          <input ng-model="player.playlistName" name="name" required>
+          <div ng-messages="playlistForm.name.$error">
+            <div ng-message="required"></div>
+          </div>
+        </md-input-container>
+      </span>
       <span flex></span>
-      <md-button ng-click="">
-       Save List
+      <md-button ng-click="savePlaylist()">
+       {{ isSaving? 'Save': 'Save List' }}
      </md-button>
      <md-button ng-click="clear()">
       Clear

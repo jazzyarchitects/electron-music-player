@@ -6,6 +6,7 @@ const readFileFromDirectory = require('./node/read-file-from-directory');
 const readMediaTags = require('./node/mediatags-get-tags.js');
 const assignInterfacer = require('./node/main-interfacer');
 const albumSorter = require('./node/album-sorter');
+const Playlist = require('./node/playlist');
 
 // const MUSIC_LIB = "/home/jibin/Music";
 
@@ -31,6 +32,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   $scope.folderSorted = [];
   $scope.albumSorted = [];
   $scope.currentSongs = [];
+  $scope.playlists = [];
   $scope.currentPlaylist = [];
   $scope.currentSong = {
     name: "",
@@ -109,6 +111,19 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
         });
       });
     }, 0);
+
+    Playlist.getAll()
+    .then((playlists)=>{
+      console.log("Playlists: ");
+      console.log(playlists);
+      $scope.$apply(()=>{
+        if(playlists===undefined){
+          $scope.playlists = [];
+          return;
+        }
+        $scope.playlists = playlists;
+      })
+    });
   };
 
   /* Function to play a selected audio file, or the previously paused*/
@@ -409,6 +424,9 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
         $scope.cancel= ()=>{
           $mdDialog.cancel()
         };
+        $scope.player = {};
+        $scope.player.playlistName = "";
+        $scope.isSaving = false;
         $scope.currentSong = parent.currentSong;
         $scope.songs = parent.currentPlaylist;
         $scope.playing = parent.isPlaying;
@@ -469,6 +487,21 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
           $scope.songs = [];
           parent.currentPlaylist = undefined;
           $scope.cancel();
+        };
+
+        $scope.savePlaylist = function(){
+          if(!$scope.isSaving){
+            return $scope.isSaving = true;
+          }else{
+            console.log($scope.player.playlistName);
+            if($scope.playlistName===''){
+              return;
+            }
+            let pls = Playlist.save($scope.player.playlistName, $scope.songs);
+            parent.playlists.push(pls);
+            console.log(parent.playlists);
+            $scope.isSaving = false;
+          }
         };
       },
       targetEvent: $event,

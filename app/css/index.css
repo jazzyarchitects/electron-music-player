@@ -31,6 +31,7 @@ body{
   user-select: none;
   overflow: hidden;
   font-family: 'Roboto';
+  color: #fff;
   border: 2px #fff solid;
   overflow-y: hidden;
 }
@@ -616,4 +617,15 @@ md-dialog .player-controls .fa-fast-backward, md-dialog .player-controls .fa-fas
 md-dialog .fa-play-circle, md-dialog .fa-pause-circle{
   font-size: 35px;
   line-height: 34px;
+}
+
+md-dialog md-input-container{
+  margin-top: 45px;
+}
+md-input-container:not(.md-input-invalid).md-input-has-value label,md-input-container:not(.md-input-invalid).md-input-focused label  {
+     color: rgba(240,240,240,0.9);
+}
+md-input-container label, md-input-container .md-input{
+  color: #fff;
+  border-color: rgba(255,255,255,0.24)
 }

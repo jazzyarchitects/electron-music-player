@@ -5,8 +5,8 @@ const path = require('path');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const globalShortcut = electron.globalShortcut;
-const configSetup = require('./modules/config-setup');
-configSetup();
+const config = require('./modules/config-setup');
+config.setup();
 
 
 let mainWindow = null;
