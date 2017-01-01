@@ -63,7 +63,7 @@
                     <i class="fa" ng-class="isPlaying?'fa-play':'fa-pause'" ng-if="song.song===currentSong.name">&nbsp;&nbsp;</i>{{ song.song | extentionFixer }}
                   </div>
                 </a>
-                <div class="song-item" flex="10" title="Remove from Playlist" ng-click="delete($index)">
+                <div class="song-item" flex="10" title="Remove from Playlist" ng-click="deleteFromPlaylist($parent.$index, $index)">
                   <i class="fa fa-close"></i>
                 </div>
               </div>

@@ -423,6 +423,10 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     return;
   };
 
+  $scope.deleteFromPlaylist = function(playlistIndex, index){
+    $scope.playlists[playlistIndex].songs.splice(index,1);
+  };
+
   $scope.playFromPlaylist = function(playlistIndex, index){
     $scope.currentPlaylist = $scope.playlists[playlistIndex].songs;
     $scope.play(index);
