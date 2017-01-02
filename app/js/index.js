@@ -10,6 +10,8 @@ const Playlist = require('./node/playlist');
 
 // const MUSIC_LIB = "/home/jibin/Music";
 
+const caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 let app = angular.module('MusicPlayer', ['ngMaterial']);
 let audio = null;
 
@@ -26,7 +28,7 @@ app.config(['$compileProvider', function($compileProvider) {
 
 app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   /* Basic environment setup */
-  $scope.currentView = 2;
+  $scope.currentView = 0;
 
   $scope.songs = [];
   $scope.folderSorted = [];
@@ -35,6 +37,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
   $scope.playlists = [];
   $scope.currentPlaylist = [];
   $scope.currentSong = {
+    playlist: "",
     name: "",
     index: 0,
     imageURL: "img/footer_lodyas.png",
@@ -156,6 +159,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
       $scope.currentSong.directory = $scope.currentPlaylist[index].directory;
       songPath = "file://"+$scope.currentPlaylist[index].directory + '/' + $scope.currentSong.name;
     }else if(index!==undefined && parentIndex!==undefined) {
+      $scope.currentSong.playlist = "";
       switch($scope.currentView) {
         case ALBUM_VIEW:
           $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.albumSorted[parentIndex].songs));
@@ -406,7 +410,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
       $scope.currentPlaylist = [];
     }
 
-    // Need to use $parent.$parent.$index for album and folder. I guess a single $parent refers to menu itme
+    // Need to use $parent.$parent.$index for album and folder. I guess a single $parent refers to menu item
     switch($scope.currentView) {
       case ALBUM_VIEW:
         $scope.currentPlaylist.push($scope.albumSorted[parentIndex].songs[index]);
@@ -423,15 +427,28 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     return;
   };
 
+  /* Deleting a song from playlist */
   $scope.deleteFromPlaylist = function(playlistIndex, index){
     $scope.playlists[playlistIndex].songs.splice(index,1);
+    let result = Playlist.update($scope.playlists[playlistIndex]);
+    if(!result){
+      $scope.playlists.splice(playlistIndex, 1);
+    }
   };
 
+  /* Play a song from playlist */
   $scope.playFromPlaylist = function(playlistIndex, index){
+    $scope.currentSong.playlist = $scope.playlists[playlistIndex].name;
     $scope.currentPlaylist = $scope.playlists[playlistIndex].songs;
     $scope.play(index);
   };
 
+  $scope.deletePlaylist = function(playlistIndex){
+    $scope.playlists.splice(playlistIndex, 1);
+    Playlist.delete($scope.playlists[playlistIndex]);
+  }
+
+  // To reference to parent scope in dialog controller
   let parent = $scope;
   $scope.showCurrentPlayist = function($event) {
     $mdDialog.show({
@@ -440,11 +457,21 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
           $mdDialog.cancel()
         };
         $scope.player = {};
-        $scope.player.playlistName = "";
+        $scope.player.playlistName = parent.currentSong.playlist;
         $scope.isSaving = false;
         $scope.currentSong = parent.currentSong;
         $scope.songs = parent.currentPlaylist;
         $scope.playing = parent.isPlaying;
+
+        /* First letter to capital */
+        $scope.$watch('player.playlistName', ()=>{
+          if($scope.player.playlistName===undefined){
+            return;
+          }
+          if(caps.indexOf($scope.player.playlistName[0])===-1 && $scope.player.playlistName!==undefined && $scope.player.playlistName!==""){
+            $scope.player.playlistName = $scope.player.playlistName[0].toUpperCase()+$scope.player.playlistName.substring(1,$scope.player.playlistName.length);
+          }
+        });
 
         $scope.play = function(index) {
           if(parent.isPlaying) {

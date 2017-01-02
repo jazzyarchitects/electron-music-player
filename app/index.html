@@ -53,8 +53,26 @@
         <!-- Playlsit View -->
         <div ng-if="currentView===0">
           <div ng-repeat="playlist in playlists" class="folder-item-holder md-accordion">
-            <div class="folder-item" ng-init="playlist.expanded=false" ng-click="playlist.expanded=!playlist.expanded">
-              <i class="fa fa-book"></i>&nbsp;&nbsp;<u>{{ playlist.name }}</u>
+            <div class="folder-item" ng-init="playlist.expanded=false" layout="row">
+              <div flex="80" ng-click="playlist.expanded=!playlist.expanded" ng-init="playlist.isDeleting=false" >
+                <i class="fa fa-book"></i>&nbsp;&nbsp;<u>{{ playlist.name }}</u>
+              </div>
+              <div class="song-item" flex="20" title="Delete Playlist" ng-click="playlist.isDeleting=!playlist.isDeleting">
+                  <i class="fa fa-close"></i>
+                </div>
+            </div>
+            <div ng-if="playlist.isDeleting" class="confirmation">
+              <div class="confirmation-message">
+                Confirm deleting this playlist
+              </div>
+              <div layout="row">
+                <button flex="50" ng-click="playlist.isDeleting=false">
+                  Cancel
+                </md-button>
+                <button flex="50" ng-click="deletePlaylist($index)">
+                  Delete
+                </md-button>
+              </div>
             </div>
             <div ng-class="{dataContent:true, activeContent:playlist.expanded}" class="folder-items">
               <div ng-repeat="song in playlist.songs" ng-class="{'active-song': song.song===currentSong.name}" class="song-item-holder" layout="row">
@@ -64,7 +82,7 @@
                   </div>
                 </a>
                 <div class="song-item" flex="10" title="Remove from Playlist" ng-click="deleteFromPlaylist($parent.$index, $index)">
-                  <i class="fa fa-close"></i>
+                  <i class="fa fa-minus"></i>
                 </div>
               </div>
             </div>

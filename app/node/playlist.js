@@ -37,3 +37,21 @@ exports.getAll = function(){
     });
   });
 }
+
+exports.update = function(playlist){
+  let filePath = path.join(config.configFolder, playlist.name+".playlist");
+  if(!fs.existsSync(filePath)){
+    return false;
+  }
+  fs.writeFileSync(filePath, JSON.stringify(playlist, null, 2));
+  return true;
+}
+
+exports.delete = function(playlist){
+  let filePath = path.join(config.configFolder, playlist.name+".playlist");
+  if(!fs.existsSync(filePath)){
+    return true;
+  }
+  fs.unlinkSync(filePath);
+  return true;
+}

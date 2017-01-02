@@ -213,6 +213,43 @@ input:focus{
   color: #fff;
 }
 
+.confirmation{
+  padding: 5px;
+  background: rgba(0,0,0,0.5);
+}
+
+.confirmation button{
+  margin: 0px;
+  background: #eee;
+  margin: 5px 10px;
+  padding: 5px;
+  font-size: 12px;
+  border: none;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+}
+
+.confirmation button:nth-child(1):hover{
+  color: #fff;
+  background: #15C62D;
+  transition-duration: 250ms;
+}
+
+.confirmation button:nth-child(2):hover{
+  color: #fff;
+  background: #F20500;
+  transition-duration: 250ms;
+}
+
+.confirmation button:focus{
+  outline: none;
+}
+
+.confirmation-message{
+  font-size: 12px;
+  width: 100%;
+  text-align: center;
+}
+
 .music-list-holder{
   /*background: url('../img/background.jpeg');*/
   background: #18226A;
@@ -306,6 +343,16 @@ input:focus{
   color: #222;
 }
 
+.folder-item .song-item{
+  line-height: initial;
+  padding: initial;
+  text-align: center;
+}
+
+.folder-item .song-item .fa{
+  font-size: 14px;
+}
+
 .directory-item:first-child{
   margin-bottom: 1px;
 }
@@ -322,7 +369,7 @@ input:focus{
   transition-duration: 250ms;
 }
 
-.directory-item:focus{
+.directory-item:focus, .folder-item div:focus{
   outline: none;
 }
 
