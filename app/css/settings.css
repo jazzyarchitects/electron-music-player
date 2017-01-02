@@ -2,6 +2,7 @@ body{
   width: 600px;
   height: 400px;
   overflow: hidden;
+  color: #222;
   border: 2px solid #fff;
 }
 
@@ -50,27 +51,35 @@ button:focus, button, a, p{
 }
 
 .setting-item{
-  width: 100%;
+  /*width: 100%;*/
   padding: 15px;
 }
 
-#music-libraries-label{
-  line-height: 150px;
+.music-libraries-label{
+  line-height: 120px;
+}
+
+.excluded-libraries-label{
+  line-height: 80px;
 }
 
 label{
   font-size: 14px;
 }
 
-.music-libraries{
+.music-libraries, .excluded-libraries{
   background: #eee;
   border: 2px #aaa groove;
-  height: 150px;
+  height: 120px;
   font-size: 12px;
   line-height: 16px;
 }
 
-.music-libraries ul{
+.excluded-libraries{
+  height: 80px;
+}
+
+.music-libraries ul, .excluded-libraries ul{
   list-style-image: url('../img/folder-icon.png');
   overflow-y: auto;
 }
@@ -81,24 +90,28 @@ label{
   margin-top: 2px;
 }
 
-.music-libraries > div{
+.music-libraries > div, .excluded-libraries >div{
   background: #ddd;
   padding: 0px;
 }
 
-.music-libraries ul li:hover{
+.music-libraries ul li:hover, .active-library{
   background: #95B3F2;
   color: #fff;
   transition-duration: 250ms;
 }
 
 .music-libraries ul li:focus{
-  background: #5A8AEF;
+  /*background: #5A8AEF;*/
   color: #fff;
   outline: none;
   transition-duration: 250ms;
 }
 
+.active-library, .music-libraries ul li:hover:focus{
+  /*background: #f00;*/
+  background: #3F42FF;
+}
 
 footer{
   position: absolute;

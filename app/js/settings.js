@@ -13,7 +13,11 @@ app.controller('SettingsController', ($scope)=>{
   $scope.currentDirectory = "";
 
   $scope.init = function() {
-    $scope.musicLibraries = MusicLibrary.getAll();
+    $scope.musicLibraries = [];
+    let a = MusicLibrary.getAll();
+    for(let p of a){
+      $scope.musicLibraries.push({path: p});
+    }
   };
 
   $scope.addLibrary = function() {
@@ -28,17 +32,22 @@ app.controller('SettingsController', ($scope)=>{
           $scope.musicLibraries = [];
         }
         if($scope.musicLibraries.indexOf(a)===-1) {
-          $scope.musicLibraries.push(a);
+          $scope.musicLibraries.push({path: a});
         }
       });
     });
   });
 
-  $scope.setCurrent = function(lib) {
-    if($scope.currentDirectory==='') {
-      $scope.currentDirectory = lib;
+  $scope.setCurrent = function(index) {
+    for(let i=0;i<$scope.musicLibraries.length;i++){
+        $scope.musicLibraries[i].isSelected = false;
+      }
+    if($scope.currentDirectory!==$scope.musicLibraries[index].path) {
+      $scope.currentDirectory = $scope.musicLibraries[index];
+      $scope.musicLibraries[index].isSelected = true;
     }else{
       $scope.currentDirectory = '';
+      $scope.musicLibraries[index].isSelected = false;
     }
   }
 

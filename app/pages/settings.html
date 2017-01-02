@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="../css/settings.css">
 </head>
 <body ng-controller="SettingsController" ng-init="init()">
-<div class="blackborder"></div>
+  <div class="blackborder"></div>
   <md-toolbar class="md-hue-2 toolbar">
     <div class="md-toolbar-tools">
       <h2>
@@ -17,42 +17,57 @@
       <span flex="">
       </span>
       <div class="buttons">
-      <i class="fa fa-close" ng-click="close()"></i>
+        <i class="fa fa-close" ng-click="close()"></i>
       </div>
     </div>
   </md-toolbar>
 
 
-<div class="main" layout="row" flex="">
-  <div layout="row" class="setting-item">
-    <label for="music_libraries" id="music-libraries-label" flex="20">Music Libraries</label>
-    <div class="music-libraries" flex="80" layout="row">
-      <ul flex="90">
-        <li ng-repeat="library in musicLibraries" ng-click="setCurrent(library)">{{ library }}</li>
-      </ul>
-      <div flex="10">
-        <button ng-click="addLibrary()" class="library-manipulation"><i class="fa fa-plus-square"></i></button>
-        <button ng-click="removeDirectory()" ng-hide="currentDirectory===''" class="library-manipulation"><i class="fa fa-trash"></i></button>
+  <div class="main">
+
+    <div layout="row" class="setting-item" flex="100">
+      <label for="music-libraries" class="music-libraries-label" flex="20">Music Libraries</label>
+      <div class="music-libraries" flex="80" layout="row">
+        <ul flex="90">
+          <li ng-repeat="library in musicLibraries" ng-init="library.isSelected=false" ng-class="{'active-library': library.isSelected}" ng-click="setCurrent($index)">{{ library.path }}</li>
+        </ul>
+        <div flex="10">
+          <button ng-click="addLibrary()" class="library-manipulation"><i class="fa fa-plus-square"></i></button>
+          <button ng-click="removeDirectory()" ng-hide="currentDirectory===''" class="library-manipulation"><i class="fa fa-trash"></i></button>
+        </div>
       </div>
     </div>
+
+    <div layout="row" class="setting-item" flex="100">
+    <label for="excluded-libraries" class="excluded-libraries-label" flex="20">Excluded Paths</label>
+      <div class="excluded-libraries" flex="80" layout="row">
+        <ul flex="90">
+          <li ng-repeat="library in musicLibraries" ng-init="library.isSelected=false" ng-class="{'active-library': library.isSelected}" ng-click="setCurrent($index)">{{ library.path }}</li>
+        </ul>
+        <div flex="10">
+          <button ng-click="addLibrary()" class="library-manipulation"><i class="fa fa-plus-square"></i></button>
+          <button ng-click="removeDirectory()" ng-hide="currentDirectory===''" class="library-manipulation"><i class="fa fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+
   </div>
-</div>
 
 
-<footer layout="row">
-  <div flex=""></div>
-  <button ng-click="close()">CLOSE</button>
-</footer>
-<!-- Angular Material requires Angular.js Libraries -->
-<script src="../../bower_components/angular/angular.min.js"></script>
-<script src="../../bower_components/angular-animate/angular-animate.min.js"></script>
-<script src="../../bower_components/angular-aria/angular-aria.min.js"></script>
-<script src="../../bower_components/angular-messages/angular-messages.min.js"></script>
+  <footer layout="row">
+    <div flex=""></div>
+    <button ng-click="close()">CLOSE</button>
+  </footer>
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="../../bower_components/angular/angular.min.js"></script>
+  <script src="../../bower_components/angular-animate/angular-animate.min.js"></script>
+  <script src="../../bower_components/angular-aria/angular-aria.min.js"></script>
+  <script src="../../bower_components/angular-messages/angular-messages.min.js"></script>
 
-<!-- Angular Material Library -->
-<script src="../../bower_components/angular-material/angular-material.min.js"></script>
-<script src="../js/settings.js"></script>
-<script type="text/javascript" src="../js/window-interfacer-settings.js"></script>
+  <!-- Angular Material Library -->
+  <script src="../../bower_components/angular-material/angular-material.min.js"></script>
+  <script src="../js/settings.js"></script>
+  <script type="text/javascript" src="../js/window-interfacer-settings.js"></script>
 
 </body>
 </html>
