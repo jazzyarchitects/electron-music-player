@@ -6,6 +6,7 @@ const MusicLibrary = require(path.join(__dirname, 'music-libraries'));
 
 
 module.exports = function(directory) {
+  let excluded = MusicLibrary.getExcluded() || [];
   if(!directory) {
     directory = MusicLibrary.getAll();
   }
@@ -17,29 +18,33 @@ module.exports = function(directory) {
     });
   }else{
     directory.forEach((d)=>{
-      files = files.concat(readDir(d));
+      files = files.concat(readDir(d, excluded));
     });
   }
 
   return files;
 }
 
-function readDir(dirname) {
+function readDir(dirname, excluded) {
   let files = [];
-  if(!fs.existsSync(dirname)) {
+  if(!fs.existsSync(dirname) || excluded.indexOf(dirname)!==-1) {
     return [];
   }
   fs.readdirSync(dirname).forEach((file)=>{
     let filePath = path.join(dirname, file);
-    let stat = fs.lstatSync(filePath);
-    if(stat.isDirectory()) {
+    if(excluded.indexOf(filePath)===-1){
+      let stat = fs.lstatSync(filePath);
+
+      if(stat.isDirectory()) {
       // files.push(readDir(filePath));
-      files = files.concat(readDir(filePath));
-    }else{
+      files = files.concat(readDir(filePath, excluded));
+    }
+    else{
       if(/(.*)\.(mp3)$/.test(file)) {
         files.push({directory: dirname, song: file});
       }
     }
-  });
+  }
+});
   return files;
 }

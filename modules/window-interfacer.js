@@ -22,11 +22,13 @@ module.exports = function(mainWindow) {
   ipcMain.on('Dialog', (event, arg)=>{
     switch(arg) {
       case 'LibrarySelect':
+      case 'ExcludedLibrarySelect':
         dialog.showOpenDialog(settingsWindow, {
           properties: ['openDirectory', 'multiSelections']
         }, (filePaths)=>{
-          event.sender.send('LibrarySelect-filePaths', filePaths);
+          event.sender.send(arg+'-filePaths', filePaths);
         });
+        break;
       default:
       break;
     }

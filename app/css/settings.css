@@ -72,6 +72,7 @@ label{
   border: 2px #aaa groove;
   height: 120px;
   font-size: 12px;
+  color: #222;
   line-height: 16px;
 }
 
@@ -103,13 +104,18 @@ label{
 
 .music-libraries ul li:focus{
   /*background: #5A8AEF;*/
-  color: #fff;
+  /*color: #fff;*/
   outline: none;
-  transition-duration: 250ms;
+  /*transition-duration: 250ms;*/
+}
+
+.library{
+  color: #222;
 }
 
 .active-library, .music-libraries ul li:hover:focus{
   /*background: #f00;*/
+  color: #fff;
   background: #3F42FF;
 }
 

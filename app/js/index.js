@@ -89,7 +89,7 @@ app.controller('MainController', ($scope, $mdDialog, $timeout)=>{
     $scope.player.songCount = $scope.songs.length;
     $scope.currentSongs = JSON.parse(JSON.stringify($scope.songs));
     $scope.currentPlaylist = JSON.parse(JSON.stringify($scope.currentSongs));
-    if($scope.currentSong.next==="") {
+    if($scope.currentSong.next==="" && $scope.currentSong[0]!==undefined) {
       $scope.currentSong.next = $scope.currentSongs[0].song;
     }
     $scope.playListSize = $scope.currentPlaylist.length;

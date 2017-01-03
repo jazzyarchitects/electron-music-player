@@ -29,24 +29,24 @@
       <label for="music-libraries" class="music-libraries-label" flex="20">Music Libraries</label>
       <div class="music-libraries" flex="80" layout="row">
         <ul flex="90">
-          <li ng-repeat="library in musicLibraries" ng-init="library.isSelected=false" ng-class="{'active-library': library.isSelected}" ng-click="setCurrent($index)">{{ library.path }}</li>
+          <li ng-repeat="library in musicLibraries" class="library" ng-class="{'active-library': $index===currentDirectory}" ng-click="setCurrent($index)">{{ library }}</li>
         </ul>
         <div flex="10">
           <button ng-click="addLibrary()" class="library-manipulation"><i class="fa fa-plus-square"></i></button>
-          <button ng-click="removeDirectory()" ng-hide="currentDirectory===''" class="library-manipulation"><i class="fa fa-trash"></i></button>
+          <button ng-click="removeDirectory()" ng-hide="currentDirectory===-1" class="library-manipulation"><i class="fa fa-trash"></i></button>
         </div>
       </div>
     </div>
 
     <div layout="row" class="setting-item" flex="100">
     <label for="excluded-libraries" class="excluded-libraries-label" flex="20">Excluded Paths</label>
-      <div class="excluded-libraries" flex="80" layout="row">
+      <div class="excluded-libraries music-libraries" flex="80" layout="row">
         <ul flex="90">
-          <li ng-repeat="library in musicLibraries" ng-init="library.isSelected=false" ng-class="{'active-library': library.isSelected}" ng-click="setCurrent($index)">{{ library.path }}</li>
+          <li ng-repeat="library in excludedLibraries" class="library" ng-class="{'active-library': $index===currentExcludedDirectory}" ng-click="setCurrentExcluded($index)">{{ library }}</li>
         </ul>
         <div flex="10">
-          <button ng-click="addLibrary()" class="library-manipulation"><i class="fa fa-plus-square"></i></button>
-          <button ng-click="removeDirectory()" ng-hide="currentDirectory===''" class="library-manipulation"><i class="fa fa-trash"></i></button>
+          <button ng-click="addExcludedLibrary()" class="library-manipulation"><i class="fa fa-plus-square"></i></button>
+          <button ng-click="removeExcludedDirectory()" ng-hide="currentExcludedDirectory===-1" class="library-manipulation"><i class="fa fa-trash"></i></button>
         </div>
       </div>
     </div>
